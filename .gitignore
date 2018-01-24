@@ -1,2 +1,6 @@
 # Byte-compiled / optimized / DLL files
 *.pyc
+*.DS_Store
+promotion/local_settings.py
+/node_modules
+package-lock.json
