@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 
 ROLE_LEVEL = (
     (1, 'super_admin'),
@@ -56,5 +57,3 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.id_name
-
-

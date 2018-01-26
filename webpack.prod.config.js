@@ -3,6 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var merge = require('webpack-merge');
 var webpackBaseConfig = require('./webpack.config.js');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 // 清空基本配置的插件列表
 webpackBaseConfig.plugins = [];
@@ -14,6 +15,7 @@ module.exports = merge(webpackBaseConfig, {
     //     filename: '[name].js'
     // },
     plugins: [
+        new UglifyJSPlugin(),
         new ExtractTextPlugin({
             filename: '../css/[name].css',
             allChunks: true
