@@ -17,4 +17,8 @@ def user_list(request):
 
 
 def user_create(request):
-	return JsonResponse({'status': True})
+	return JsonResponse({'success': True})
+
+
+def group_create(request):
+	return JsonResponse({'success': True})
