@@ -7,6 +7,8 @@ import Home from 'pages/Home'
 import UserList from 'pages/accounts/UserList'
 import GroupList from 'pages/accounts/GroupList'
 import RoleList from 'pages/accounts/RoleList'
+import AssetsList from 'pages/assets/AssetsList'
+import CategoryList from 'pages/assets/CategoryList'
 
 Vue.use(Router)
 
@@ -57,6 +59,30 @@ export default new Router({
           }
         }
       ]
-    }
+    },
+    {
+      path: '/assets',
+      name: '推介资产管理',
+      component: Base,
+      redirect: '/assets/assets_list',
+      children: [
+        {
+          path: 'assets_list',
+          component: AssetsList,
+          name: '推介资产信息',
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: 'category_list',
+          component: CategoryList,
+          name: '资产种类管理',
+          meta: {
+            requireAuth: true
+          }
+        }
+      ]
+    },
   ]
 })
