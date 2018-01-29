@@ -44,7 +44,7 @@
     </el-col>
     <!-- add/edit modal -->
     <el-dialog
-      :title="groupAdd ? 添加区域 : 编辑区域"
+      :title="groupAdd ? '添加区域' : '编辑区域'"
       :visible.sync="groupModal"
     >
       <el-form :model="currentGroup" label-width="80px" ref="groupForm">
@@ -60,7 +60,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="groupModal = false">取 消</el-button>
-        <el-button type="primary" @click="groupModal = false">确 定</el-button>
+        <el-button type="primary" @click="submitGroup">确 定</el-button>
       </div>
     </el-dialog>
   </el-row>
@@ -86,6 +86,14 @@
           this.groupAdd = true
         }
         this.groupModal = true
+      },
+      submitGroup() {
+        this.axios.post('/accounts/group_create/', this.currentGroup)
+        .then(reponse => {
+          console.log(reponse)
+        }).catch(error => {
+          console.log(error)
+        })
       },
     },
   }
