@@ -14,10 +14,9 @@ DEBTS_TYPE = (
 )
 
 class Category(models.Model):
-    name = models.CharField(max_length=16, unique=True,
-                            verbose_name=u'资产类型')
+    category_name = models.CharField(max_length=16, unique=True,
+                                     verbose_name=u'资产类型')
     
-
     class Meta:
         verbose_name = verbose_name_plural = u'资产分类'
 
@@ -70,7 +69,7 @@ class Assets(models.Model):
 
     @property
     def cate_name(self):
-        return self.category.name
+        return self.category.category_name
 
     def get_imgs(self, size='large'):
         imgs = self.assetsimg_set.all()

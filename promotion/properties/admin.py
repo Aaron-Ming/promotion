@@ -15,8 +15,8 @@ class AssetsAdmin(admin.ModelAdmin):
     inlines = [AssetsImgline]
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id')
-    search_fields = ('name',)
+    list_display = ('category_name', 'id')
+    search_fields = ('category_name',)
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('author', 'assets', 'content', 'c_time')
