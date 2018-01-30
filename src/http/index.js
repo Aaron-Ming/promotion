@@ -6,10 +6,10 @@ const instance = axios.create({
   validateStatus (status) {
     return status >= 200 && status <= 500
   },
-  transformRequest: [function(data){
-    data = qs.stringify(data)
-    return data
-  }],
+  // transformRequest: [function(data){
+  //   data = qs.stringify(data)
+  //   return data
+  // }],
   timeout: 5000,
 })
 

@@ -78,9 +78,12 @@
       }
     },
     created() {
-      
+      console.log(11111)
     },
     methods: {
+      getGroups() {
+
+      },
       showModal(action) {
         if(action == 'add') {
           this.groupAdd = true
@@ -88,7 +91,7 @@
         this.groupModal = true
       },
       submitGroup() {
-        this.axios.post('/accounts/group_create/', this.currentGroup)
+        this.axios.post('/accounts/group_list/', this.currentGroup)
         .then(reponse => {
           console.log(reponse)
         }).catch(error => {
