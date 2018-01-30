@@ -13,8 +13,10 @@ ROLE_LEVEL = (
 
 # 用户组
 class UserGroup(models.Model):
-    group_name = models.CharField(max_length=15, verbose_name=u'组名称')
-    alias_name = models.CharField(max_length=15, verbose_name=u'组别名')
+    group_name = models.CharField(max_length=15, verbose_name=u'组名称',
+                                  unique=True)
+    alias_name = models.CharField(max_length=15, verbose_name=u'组别名',
+                                  unique=True)
     group_admin = models.ForeignKey('UserProfile', related_name='userprofile',
                                     verbose_name=u'组管理员', blank=True, null=True)
 
