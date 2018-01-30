@@ -2,11 +2,12 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from promotion.properties.models import Assets, AssetsImg
+from promotion.properties.models import Assets, AssetsImg, Category
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
+from promotion.properties.forms import CategoryForm
 import json
 # Create your views here.
 return_str = {
@@ -104,6 +105,43 @@ def post(request):
     age = json_data.get('age')
     # print name,age
     return JsonResponse({'name': name, 'age': age})
+
+
+@require_http_methods(['GET'])
+def category_list(request):
+    categorys = Category.objects.all().order_by('id')
+    data = []
+    def format_list(x):
+        return {'category_name': x.category_name,
+                'id': x.id}
+    if len(categorys):
+        data = map(format_list, categorys)
+        return_str['data'] = data
+    else:
+        return_str['success'], return_str['status'] = False, 400
+    return JsonResponse(return_str)
+
+
+@require_http_methods(['POST'])
+def category_create(request):
+    # import pdb; pdb.set_trace()
+    category_form = CategoryForm(request.POST)
+    if category_form.is_valid():
+        new_category = category_form.save()
+        new_category_id = new_category.id
+        return JsonResponse({'success': True, 'data': new_category_id})
+    else:
+        return JsonResponse({'success': False})
+
+@require_http_methods(['POST'])
+def category_delete(request):
+    print request.body
+    category_id = request.POST.get('category_id')
+    print category_id
+    dest_category = Category.objects.get(id=category_id)
+    d.delete()
+    return JsonResponse({'success': True})
+
 
 
 
