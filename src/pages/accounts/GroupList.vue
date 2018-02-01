@@ -78,11 +78,24 @@
       }
     },
     created() {
-      console.log(11111)
+      this.getGroups()
     },
     methods: {
       getGroups() {
-
+        this.axios.get('/accounts/group_list/')
+        .then(res => {
+          if(res.status == 200) {
+            this.groups = res.data
+          } else {
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '错误代码: ' + res.status
+            })
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       },
       showModal(action) {
         if(action == 'add') {
@@ -92,8 +105,18 @@
       },
       submitGroup() {
         this.axios.post('/accounts/group_list/', this.currentGroup)
-        .then(reponse => {
-          console.log(reponse)
+        .then(res => {
+          if(res.status == 201) {
+            this.groups.push(res.data)
+          } else {
+            console.log(res)
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '错误代码: ' + res.status
+            })
+          }
+          this.groupModal = false
         }).catch(error => {
           console.log(error)
         })
