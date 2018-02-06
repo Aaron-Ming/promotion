@@ -31,8 +31,7 @@
         },
         rules: {
           user: [
-            {required: true, message: '请输入登入邮箱', trigger: 'blur'},
-            {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change'}
+            {required: true, message: '请输管理员账号', trigger: 'blur'},
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'}

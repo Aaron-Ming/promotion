@@ -36,7 +36,7 @@
           >
             <template slot-scope="scope">
               <el-button type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,25 +75,75 @@
         groupModal: false,
         groupAdd: false,
         currentGroup: {},
+        currentIndex: null,
       }
     },
     created() {
-      console.log(11111)
+      this.getGroups()
     },
     methods: {
       getGroups() {
-
+        this.axios.get('/accounts/groups/')
+        .then(res => {
+          if(res.status == 200) {
+            this.groups = res.data
+          } else {
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '错误代码: ' + res.status
+            })
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       },
-      showModal(action) {
+      showModal(action, index) {
         if(action == 'add') {
           this.groupAdd = true
+          if(this.currentGroup.id) {
+            this.currentGroup = {}
+          }
+        } else if(index>=0) {
+          this.currentIndex = index
+          this.currentGroup = Object.assign({}, this.groups[index])
         }
         this.groupModal = true
       },
+      detailUrl() {
+        return '/accounts/groups/' + this.currentGroup.id + '/'
+      },
       submitGroup() {
-        this.axios.post('/accounts/group_list/', this.currentGroup)
-        .then(reponse => {
-          console.log(reponse)
+        let submitUrl = '/accounts/groups/'
+        let method = 'post'
+        if(!this.groupAdd) {
+          submitUrl = this.detailUrl()
+          method = 'put'
+        }
+        this.axios({
+          method: method,
+          data: this.currentGroup,
+          url: submitUrl
+        }).then(res => {
+          if(res.status<400) {
+            if(this.groupAdd) {
+              this.groups.push(res.data)
+            } else {
+              this.groups.splice(this.currentIndex, 1, this.currentGroup)
+            }
+            this.$message({
+              message: '操作成功！',
+              type: 'success'
+            })
+          } else {
+            let errorMsg = ''
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: res.data
+            })
+          }
+          this.groupModal = false
         }).catch(error => {
           console.log(error)
         })
