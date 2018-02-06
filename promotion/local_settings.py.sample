@@ -1,0 +1,12 @@
+DATABASES = {
+    'default' : {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'promotion',
+        'USER': 'root',
+        'PASSWORD': 'xiaojia',
+        'HOST': 'localhost',
+        # 'PORT': '3306',
+    }
+}
+
+ALLOWED_HOSTS = ['*'] 
