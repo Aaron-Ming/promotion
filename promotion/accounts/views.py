@@ -15,20 +15,6 @@ from promotion.accounts.forms import UserGroupForm
 from promotion.accounts.serializers import GroupSerializer
 
 
-
-# class GroupList(mixins.ListModelMixin,
-#                 mixins.CreateModelMixin,
-#                 generics.GenericAPIView):
-#     queryset = UserGroup.objects.all()
-#     serializer_class = GroupSerializer
-
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
-
-
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = UserGroup.objects.all()
     serializer_class = GroupSerializer
