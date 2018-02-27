@@ -5,8 +5,8 @@
         <h1>欢迎登入运维平台</h1>
         <small v-show="!loginStatus.success">{{ loginStatus.msg }}</small>
         <el-form ref="userForm" :model="userForm" :rules="rules" label-width="80px">
-          <el-form-item label="用户名" prop="user">
-            <el-input v-model="userForm.user" placeholder="邮箱"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="userForm.username" placeholder="邮箱"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="userForm.password" placeholder="密码"></el-input>
@@ -26,12 +26,12 @@
     data() {
       return {
         userForm: {
-          user: '',
+          username: '',
           password: ''
         },
         rules: {
-          user: [
-            {required: true, message: '请输管理员账号', trigger: 'blur'},
+          username: [
+            {required: true, message: '请输管理员账号', trigger: 'blur'}
           ],
           password: [
             {required: true, message: '请输入密码', trigger: 'blur'}
@@ -55,16 +55,10 @@
       login() {
         this.$refs['userForm'].validate((valid) => {
           if(valid) {
-            this.axios.post('/v1/user/login', this.userForm)
+            this.axios.post('/accounts/login/', this.userForm)
             .then(response => {
               let loginData = response.data
-              if(loginData.status == '2000' && loginData.success == true) {
-                this.$store.commit(types.LOGIN, loginData)
-                this.$router.push({path: this.redirect})
-              } else {
-                this.loginStatus.success = loginData.success
-                this.loginStatus.msg = loginData.msg
-              }
+              console.log(response)
             })
             .catch(error => {
               console.log(error)

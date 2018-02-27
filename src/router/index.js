@@ -12,7 +12,7 @@ import CategoryList from 'pages/assets/CategoryList'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/login',
@@ -86,3 +86,20 @@ export default new Router({
     },
   ]
 })
+
+// router.beforeEach((to, from, next) => {
+//   if(to.meta.requireAuth) {
+//     if(store.state.user.token) {
+//       next()
+//     } else {
+//       next({
+//         path: '/login',
+//         query: {redirect: to.fullPath}
+//       })
+//     }
+//   } else {
+//     next()
+//   }
+// })
+
+export default router
