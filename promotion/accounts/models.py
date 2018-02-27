@@ -9,6 +9,7 @@ ROLE_LEVEL = (
     (1, 'super_admin'),
     (2, 'group_admin'),
     (3, 'group_user'),
+    (4, 'normal_user'),
 )
 
 # 用户组
@@ -30,7 +31,7 @@ class UserGroup(models.Model):
 class UserRole(models.Model):
     role_name = models.CharField(max_length=15, verbose_name=u'角色名称')
     alias_name = models.CharField(max_length=15, verbose_name=u'角色别名中文')
-    role_level = models.IntegerField(default=3, verbose_name=u'角色级别', choices=ROLE_LEVEL)
+    role_level = models.IntegerField(default=4, verbose_name=u'角色级别', choices=ROLE_LEVEL)
 
     class Meta:
         verbose_name = verbose_name_plural = u'用户角色'
