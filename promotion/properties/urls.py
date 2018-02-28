@@ -1,14 +1,22 @@
 #encode: utf-8
-
 from django.conf.urls import url
-from promotion.properties import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from promotion.properties.views import CategoryViewSet
+
+category_list = CategoryViewSet.as_view({
+    'get': 'list',
+    'post': 'create',
+})
+
+category_detail = CategoryViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'delete': 'destroy'
+})
 
 urlpatterns = [
-    url(r'^assets_list/$', views.assets_query, name='assets_query'),
-    url(r'^detail/(?P<assets_id>\d+)', views.assets_detail, name='assets_detail'),
-    url(r'^create$', views.assets_create, name='assets_create'),
-    url(r'^post$', views.post, name='post'),
-    url(r'^category_list/$', views.category_list, name='category_list'),
-    url(r'^category_create/$', views.category_create, name='category_create'),
-    url(r'^category_delete/$', views.category_delete, name='category_delete'),
+    url(r'^categorys/$', category_list, name='category_list'),
+    url(r'^categorys/(?P<pk>\d+)/', category_detail, name='category_detail'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
