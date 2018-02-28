@@ -21,7 +21,7 @@ class Category(models.Model):
         verbose_name = verbose_name_plural = u'资产分类'
 
     def __unicode__(self):
-        return self.name
+        return self.category_name
 
 class Assets(models.Model):
     category = models.ForeignKey(Category, verbose_name=u'分类')

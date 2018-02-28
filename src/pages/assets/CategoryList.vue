@@ -4,7 +4,7 @@
       <el-card class="box-card">
         <div slot="header" class="clearfix">
           <span>资产类别管理</span>
-          <el-button style="float: right; padding: 3px 0" type="text" @click="showModal('add')">添加种类</el-button>
+          <el-button style="float: right; padding: 3px 0" type="text" @click="showModal('add')">添加类型</el-button>
         </div>
         <el-table
           :data="categorys"
@@ -12,7 +12,7 @@
           style="width: 100%"
         >
           <el-table-column
-            prop="id"
+            type="index"
             label="ID"
           >
           </el-table-column>
@@ -26,8 +26,8 @@
           >
             <template slot-scope="scope">
               <el-button type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">编辑</el-button>
-              <el-button type="danger" size="mini" @click="deleteCategory(scope.row.id)">删除</el-button>
+              <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
+              <el-button type="danger" size="mini" @click="deleteCategory(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -60,53 +60,116 @@
         categoryModal: false,
         categoryAdd: false,
         currentCategory: {},
-        delCategoryId: {},
+        currentIndex: null,
+        categoryDel: false,
+        categoryUrl: '/assets/categorys/'
       }
     },
     created() {
       this.getCategorys()
     },
     methods: {
-      showModal(action) {
-        if(action == 'add') {
-          this.categoryAdd = true
-        }
-        this.categoryModal = true
-      },
-      submitCategory() {
-        this.axios.post('/assets/category_create/', this.currentCategory)
-        .then(response => {
-          if (response.data.success == true) {
-            console.log('lsdjflskaaaaaaaaa')
-            this.currentCategory.id = response.data.data
-            this.categorys.push(this.currentCategory)
-            this.categoryModal = false
-            console.log(response)
+      getCategorys() {
+        this.axios.get('/assets/categorys/')
+        .then(res => {
+          if (res.status == 200) {
+            this.categorys = res.data
           } else {
-            console.log('submitCategory error....')
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '错误代码: ' + res.status
+            })
           }
-          
         }).catch(error => {
           console.log(error)
         })
       },
-      getCategorys() {
-        this.axios.get('/assets/category_list/')
-        .then(response => {
-          if (response.data.success == true) {
-            this.categorys = response.data.data
-          } else {
-            console.log('error11111111111')
+      showModal(action, index) {
+        if(action == 'add') {
+          this.categoryAdd = true
+          if(this.currentCategory.id) {
+            this.currentCategory = {}
           }
+        } else if(index>=0) {
+          this.currentIndex = index
+          this.currentCategory = Object.assign({}, this.categorys[index])
+        }
+        this.categoryModal = true
+      },
+      detailUrl() {
+        return this.categoryUrl + this.currentCategory.id + '/'
+      },
+      submitCategory() {
+        let submitUrl =  '/assets/categorys/'
+        let method = 'post'
+        if(!this.categoryAdd) {
+          submitUrl = this.detailUrl()
+          method = 'put'
+        }
+        this.axios({
+          method: method,
+          data: this.currentCategory,
+          url: submitUrl
+        }).then(res => {
+          if(res.status<400) {
+            if(this.categoryAdd) {
+              this.categorys.push(res.data)
+            } else {
+              this.categorys.splice(this.currentIndex, 1, this.currentCategory)
+            }
+            this.$message({
+              message: '操作成功！',
+              type: 'success'
+            })
+          } else {
+            let errorMsg = ''
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: res.data
+            })
+          }
+          this.categoryModal = false
+        }).catch(error => {
+          console.log(error)
         })
       },
-      deleteCategory(category_id) {
-        console.log(category_id)
-        this.delCategoryId.id = category_id
-        this.axios.post('/assets/category_delete/', this.delCategoryId)
-        
-      },
+      deleteCategory(index) {
+        let delConfirmType = 'success'
+        let delConfirmMsg = '删除成功!'
+        this.currentIndex = index
+        this.currentCategory = Object.assign({}, this.categorys[this.currentIndex])
+        this.$confirm('是否删除此类型', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.axios({
+            method: 'delete',
+            url: this.detailUrl()
+          }).then(res => {
+            if (res.status<400) {
+              delConfirmMsg = '删除' + this.currentCategory.category_name + '成功!'
+              this.categorys.splice(this.currentIndex, 1)
+            } else {
+              this.$notify.error({
+                title: '出错了',
+                duration: 0,
+                message: res.data
+              })
+              delConfirmType = 'info'
+              delConfirmMsg = '已取消删除!'
+            }
+            this.$message({
+              type: delConfirmType,
+              message: delConfirmMsg
+            });
+          }).catch(error => {
+            console.log(error)
+          });
+        });
+      }
     },
-    
   }
 </script>
