@@ -67,7 +67,6 @@
 </template>
 
 <script>
-  import chinese from 'src/common/chinese'
   export default {
     data() {
       return {
