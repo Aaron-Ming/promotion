@@ -15,7 +15,8 @@ from rest_framework.response import Response
 from promotion.accounts.models import (UserProfile, UserGroup,
                                        UserRole)
 from promotion.accounts.forms import UserGroupForm
-from promotion.accounts.serializers import GroupSerializer
+from promotion.accounts.serializers import (GroupSerializer,
+                                            ProfileSerializer)
 
 
 class Login(ObtainAuthToken):
@@ -32,3 +33,8 @@ class Login(ObtainAuthToken):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = UserGroup.objects.all()
     serializer_class = GroupSerializer
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = ProfileSerializer
