@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +17,9 @@ from promotion.accounts.models import (UserProfile, UserGroup,
                                        UserRole)
 from promotion.accounts.forms import UserGroupForm
 from promotion.accounts.serializers import (GroupSerializer,
-                                            ProfileSerializer)
+                                            ProfileSerializer,
+                                            RoleSerializer,
+                                            UserSerializer)
 
 
 class Login(ObtainAuthToken):
@@ -35,6 +38,19 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
 
 
+class RoleViewSet(viewsets.ModelViewSet):
+    queryset = UserRole.objects.all()
+    serializer_class = RoleSerializer
+
+
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = ProfileSerializer
+
+    def create(self, request, *args, **kwargs):
+        res_data = request.data
+        username = res_data.get('mobile', '')
+        password = res_data.get('password', '')
+        user = User.objects.create_user(username=username, password=password)
+        request.data['user'] = user.id
+        return super(ProfileViewSet, self).create(request, *args, **kwargs)
