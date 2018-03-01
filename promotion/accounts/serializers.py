@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from rest_framework import serializers, validators
-from promotion.accounts.models import UserGroup, UserProfile
+from promotion.accounts.models import UserGroup, UserProfile, UserRole
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -19,6 +19,12 @@ class GroupSerializer(serializers.ModelSerializer):
                 validator.message = u'区域组别名已经存在！'
 
 
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserRole
+        fields = ('id', 'role_name', 'role_level')
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -34,11 +40,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    role_name = serializers.CharField(source='role.role_name', required=False)
+    group_name = serializers.CharField(source='group.group_name', required=False)
+
     class Meta:
         model = UserProfile
-        fields = ('mobile', 'id_number', 'credit_code', 'avatar',
-                  'id_name', 'occupation', 'role', 'group')
-
-    def create(self, validated_data):
-        profile = super(ProfileSerializer, self).create(validated_data)
-        return profile
+        fields = ('id', 'mobile', 'id_number', 'credit_code', 'avatar',
+                  'id_name', 'occupation', 'role_name', 'group_name',
+                  'role', 'group', 'user')
