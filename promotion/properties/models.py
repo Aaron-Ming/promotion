@@ -61,9 +61,9 @@ class Assets(models.Model):
         dit_data = model_to_dict(self)
         dit_data['category'] = self.cate_name
         dit_data['imgs'] = self.get_imgs()
-        dit_data['spot'] = dit_data['spot']
-        dit_data['parms'] = (dit_data['parms'])
-        dit_data['instruction'] = dit_data['instruction']
+        # dit_data['spot'] = dit_data['spot']
+        # dit_data['parms'] = dit_data['parms']
+        # dit_data['instruction'] = dit_data['instruction']
         # print dit_data['instruction']
         return dit_data
 
