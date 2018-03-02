@@ -75,9 +75,9 @@
 /* harmony export (immutable) */ __webpack_exports__["a"] = asyncMap;
 /* harmony export (immutable) */ __webpack_exports__["b"] = complementError;
 /* harmony export (immutable) */ __webpack_exports__["c"] = deepMerge;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__);
 
 
@@ -11113,7 +11113,7 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(26), __webpack_require__(95).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(27), __webpack_require__(95).setImmediate))
 
 /***/ }),
 /* 3 */
@@ -11934,7 +11934,7 @@ if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject = __webpack_require__(20);
+var anObject = __webpack_require__(21);
 var IE8_DOM_DEFINE = __webpack_require__(63);
 var toPrimitive = __webpack_require__(30);
 var dP = Object.defineProperty;
@@ -11957,7 +11957,7 @@ exports.f = __webpack_require__(9) ? Object.defineProperty : function defineProp
 /***/ (function(module, exports, __webpack_require__) {
 
 // Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(18)(function () {
+module.exports = !__webpack_require__(19)(function () {
   return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -12074,7 +12074,7 @@ var valueEquals = exports.valueEquals = function valueEquals(a, b) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(8);
-var createDesc = __webpack_require__(21);
+var createDesc = __webpack_require__(22);
 module.exports = __webpack_require__(9) ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
 } : function (object, key, value) {
@@ -12142,7 +12142,7 @@ exports.default = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var store = __webpack_require__(34)('wks');
-var uid = __webpack_require__(23);
+var uid = __webpack_require__(24);
 var Symbol = __webpack_require__(7).Symbol;
 var USE_SYMBOL = typeof Symbol == 'function';
 
@@ -12156,6 +12156,12 @@ $exports.store = store;
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(131), __esModule: true };
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports) {
 
 var core = module.exports = { version: '2.5.3' };
@@ -12163,7 +12169,7 @@ if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -12172,7 +12178,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = function (exec) {
@@ -12185,11 +12191,11 @@ module.exports = function (exec) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(7);
-var core = __webpack_require__(16);
+var core = __webpack_require__(17);
 var ctx = __webpack_require__(133);
 var hide = __webpack_require__(12);
 var PROTOTYPE = 'prototype';
@@ -12252,10 +12258,10 @@ module.exports = $export;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(17);
+var isObject = __webpack_require__(18);
 module.exports = function (it) {
   if (!isObject(it)) throw TypeError(it + ' is not an object!');
   return it;
@@ -12263,7 +12269,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = function (bitmap, value) {
@@ -12277,7 +12283,7 @@ module.exports = function (bitmap, value) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
@@ -12290,7 +12296,7 @@ module.exports = Object.keys || function keys(O) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 var id = 0;
@@ -12301,14 +12307,14 @@ module.exports = function (key) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 exports.f = {}.propertyIsEnumerable;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12335,7 +12341,7 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 };
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 var g;
@@ -12362,7 +12368,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12462,7 +12468,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12470,7 +12476,7 @@ module.exports = defaults;
 
 exports.__esModule = true;
 
-var _assign = __webpack_require__(29);
+var _assign = __webpack_require__(16);
 
 var _assign2 = _interopRequireDefault(_assign);
 
@@ -12491,17 +12497,11 @@ exports.default = _assign2.default || function (target) {
 };
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(131), __esModule: true };
-
-/***/ }),
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(17);
+var isObject = __webpack_require__(18);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function (it, S) {
@@ -12542,7 +12542,7 @@ module.exports = function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var shared = __webpack_require__(34)('keys');
-var uid = __webpack_require__(23);
+var uid = __webpack_require__(24);
 module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
@@ -13930,7 +13930,7 @@ exports.f = __webpack_require__(15);
 /***/ (function(module, exports, __webpack_require__) {
 
 var global = __webpack_require__(7);
-var core = __webpack_require__(16);
+var core = __webpack_require__(17);
 var LIBRARY = __webpack_require__(46);
 var wksExt = __webpack_require__(49);
 var defineProperty = __webpack_require__(8).f;
@@ -14576,7 +14576,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends2 = __webpack_require__(28);
+var _extends2 = __webpack_require__(29);
 
 var _extends3 = _interopRequireDefault(_extends2);
 
@@ -14630,7 +14630,7 @@ exports.default = {
 /* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(9) && !__webpack_require__(18)(function () {
+module.exports = !__webpack_require__(9) && !__webpack_require__(19)(function () {
   return Object.defineProperty(__webpack_require__(64)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -14639,7 +14639,7 @@ module.exports = !__webpack_require__(9) && !__webpack_require__(18)(function ()
 /* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(17);
+var isObject = __webpack_require__(18);
 var document = __webpack_require__(7).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
@@ -15807,11 +15807,153 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _assign = __webpack_require__(16);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
   data: function data() {
     return {
-      users: []
+      users: [],
+      userAdd: false,
+      userModalShow: false,
+      currentUser: {},
+      currentIndex: null,
+      selectData: {
+        roles: [],
+        groups: []
+      }
     };
+  },
+  created: function created() {
+    this.getUsers();
+  },
+
+  methods: {
+    getUsers: function getUsers() {
+      var _this = this;
+
+      this.axios.get('/accounts/users/').then(function (res) {
+        if (res.status == 200) {
+          _this.users = res.data;
+        } else {
+          _this.$notify.error({
+            title: '获取用户失败',
+            duration: 20000,
+            message: _this.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+          });
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    getRoles: function getRoles() {
+      var _this2 = this;
+
+      if (this.selectData.roles.length > 0) {
+        if (this.userAdd) {
+          var defaultRole = this.selectData.roles.filter(function (el) {
+            return el.role_level == 4;
+          });
+          this.currentUser.role = defaultRole[0].id;
+        }
+        return false;
+      }
+      this.axios.get('/accounts/roles/').then(function (res) {
+        if (res.status == 200) {
+          _this2.selectData.roles = res.data;
+          if (_this2.userAdd) {
+            var _defaultRole = res.data.filter(function (el) {
+              return el.role_level == 4;
+            });
+            _this2.currentUser.role = _defaultRole[0].id;
+          }
+        } else {
+          _this2.$notify.error({
+            title: '获取角色失败',
+            duration: 20000,
+            message: _this2.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+          });
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    getGroups: function getGroups() {
+      var _this3 = this;
+
+      if (this.selectData.groups.length > 0) {
+        return false;
+      }
+      this.axios.get('/accounts/groups/').then(function (res) {
+        if (res.status == 200) {
+          _this3.selectData.groups = res.data;
+        } else {
+          _this3.$notify.error({
+            title: '获取区域组失败',
+            duration: 20000,
+            message: _this3.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+          });
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    setCurrentUser: function setCurrentUser(index) {
+      if (this.userAdd && this.currentUser.id) {
+        this.currentUser = { role: this.currentUser.role || null };
+      } else if (index >= 0) {
+        this.currentUser = (0, _assign2.default)({}, this.users[index]);
+        this.currentIndex = index;
+      }
+    },
+    showModal: function showModal(action, index) {
+      this.userAdd = action == 'add';
+      this.getGroups();
+      this.getRoles();
+      this.setCurrentUser(index);
+      this.userModalShow = true;
+    },
+    submitUser: function submitUser() {
+      var _this4 = this;
+
+      var method = this.userAdd ? 'post' : 'put';
+      var submitApi = this.userAdd ? '/accounts/users/' : '/accounts/users/' + this.currentUser.id + '/';
+      var msg = this.userAdd ? '添加' : '修改';
+      this.axios({
+        method: method,
+        url: submitApi,
+        data: this.currentUser
+      }).then(function (res) {
+        var user = res.data;
+        if (_this4.userAdd && res.status == 201) {
+          _this4.currentUser.id = user.id;
+          _this4.users.push(user);
+          _this4.$message({
+            message: '用户添加成功',
+            type: 'success'
+          });
+        } else if (res.status == 200) {
+          _this4.users.splice(_this4.currentIndex, 1, user);
+          _this4.$message({
+            message: '用户编辑成功',
+            type: 'success'
+          });
+        } else {
+          _this4.$notify.error({
+            title: '用户' + msg + '失败',
+            duration: 0,
+            message: '错误代码: ' + res.status + ', 请联系管理员'
+          });
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+      this.userModalShow = false;
+    }
   }
 };
 
@@ -15826,13 +15968,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assign = __webpack_require__(29);
+var _assign = __webpack_require__(16);
 
 var _assign2 = _interopRequireDefault(_assign);
-
-var _chinese = __webpack_require__(76);
-
-var _chinese2 = _interopRequireDefault(_chinese);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15925,12 +16063,6 @@ exports.default = {
 
 /***/ }),
 /* 76 */
-/***/ (function(module, exports) {
-
-module.exports = {"sProcessing":"处理中...","sLengthMenu":"显示 _MENU_ 项结果","sZeroRecords":"没有匹配结果","sInfo":"显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项","sInfoEmpty":"显示第 0 至 0 项结果，共 0 项","sInfoFiltered":"(由 _MAX_ 项结果过滤)","sInfoPostFix":"","sSearch":"搜索:","sUrl":"","sEmptyTable":"木有想要的数据哎","sLoadingRecords":"载入中...","sInfoThousands":",","oPaginate":{"sFirst":"首页","sPrevious":"上页","sNext":"下页","sLast":"末页"},"oAria":{"sSortAscending":": 以升序排列此列","sSortDescending":": 以降序排列此列"}}
-
-/***/ }),
-/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15946,20 +16078,163 @@ exports.default = {
 };
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+
+var _assign = __webpack_require__(16);
+
+var _assign2 = _interopRequireDefault(_assign);
+
+var _chinese = __webpack_require__(78);
+
+var _chinese2 = _interopRequireDefault(_chinese);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
-    data: function data() {
-        return {};
+  data: function data() {
+    return {
+      propertyInstr: '',
+      propertyParms: '',
+      propertySpot: '',
+      properties: [],
+      propertyModal: false,
+      propertyAdd: false,
+      currentProperty: {},
+      currentIndex: null,
+      propertyUrl: '/assets/properties/'
+    };
+  },
+  created: function created() {
+    this.getProperties();
+  },
+
+  methods: {
+    getProperties: function getProperties() {
+      var _this = this;
+
+      this.axios.get(this.propertyUrl).then(function (res) {
+        if (res.status == 200) {
+          _this.properties = res.data;
+          console.log(_this.properties);
+        } else {
+          _this.$notify.error({
+            title: '出错了',
+            duration: 0,
+            message: '错误代码: ' + res.status
+          });
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    showModal: function showModal(action, index) {
+      if (action == 'add') {
+        this.propertyAdd = true;
+        if (this.currentProperty.id) {
+          this.currentProperty = {};
+        }
+      } else if (index >= 0) {
+        this.currentIndex = index;
+        this.currentProperty = (0, _assign2.default)({}, this.properties[index]);
+      }
+      this.propertyModal = true;
+    },
+    detailUrl: function detailUrl() {
+      return this.propertyUrl + this.currentProperty.id + '/';
+    },
+    test: function test() {
+      return 'aaa';
+    },
+    submitProperty: function submitProperty() {
+      var _this2 = this;
+
+      var submitUrl = this.propertyUrl;
+      var method = 'post';
+      if (!this.propertyAdd) {
+        submitUrl = this.detailUrl();
+        method = 'put';
+      }
+      this.axios({
+        method: method,
+        data: this.currentProperty,
+        url: submitUrl
+      }).then(function (res) {
+        if (res.status < 400) {
+          if (_this2.propertyAdd) {
+            _this2.properties.push(res.data);
+          } else {
+            _this2.properties.splice(_this2.currentIndex, 1, _this2.currentProperty);
+          }
+          _this2.$message({
+            message: '操作成功！',
+            type: 'success'
+          });
+        } else {
+          var errorMsg = '';
+          _this2.$notify.error({
+            title: '出错了',
+            duration: 0,
+            message: res.data
+          });
+        }
+        _this2.propertyModal = false;
+      }).catch(function (error) {
+        console.log(error);
+      });
+    },
+    deleteProperty: function deleteProperty(index) {
+      var _this3 = this;
+
+      var delConfirmType = 'success';
+      var delConfirmMsg = '删除成功!';
+      this.currentIndex = index;
+      this.currentProperty = (0, _assign2.default)({}, this.properties[this.currentIndex]);
+      this.$confirm('是否删除此类型', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        _this3.axios({
+          method: 'delete',
+          url: _this3.detailUrl()
+        }).then(function (res) {
+          if (res.status < 400) {
+            delConfirmMsg = '删除' + _this3.currentProperty.title + '成功!';
+            _this3.properties.splice(_this3.currentIndex, 1);
+          } else {
+            _this3.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: res.data
+            });
+            delConfirmType = 'info';
+            delConfirmMsg = '已取消删除!';
+          }
+          _this3.$message({
+            type: delConfirmType,
+            message: delConfirmMsg
+          });
+        }).catch(function (error) {
+          console.log(error);
+        });
+      });
     }
+  }
 };
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports) {
+
+module.exports = {"sProcessing":"处理中...","sLengthMenu":"显示 _MENU_ 项结果","sZeroRecords":"没有匹配结果","sInfo":"显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项","sInfoEmpty":"显示第 0 至 0 项结果，共 0 项","sInfoFiltered":"(由 _MAX_ 项结果过滤)","sInfoPostFix":"","sSearch":"搜索:","sUrl":"","sEmptyTable":"木有想要的数据哎","sLoadingRecords":"载入中...","sInfoThousands":",","oPaginate":{"sFirst":"首页","sPrevious":"上页","sNext":"下页","sLast":"末页"},"oAria":{"sSortAscending":": 以升序排列此列","sSortDescending":": 以降序排列此列"}}
 
 /***/ }),
 /* 79 */
@@ -15972,11 +16247,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assign = __webpack_require__(29);
+var _assign = __webpack_require__(16);
 
 var _assign2 = _interopRequireDefault(_assign);
 
-var _chinese = __webpack_require__(76);
+var _chinese = __webpack_require__(78);
 
 var _chinese2 = _interopRequireDefault(_chinese);
 
@@ -17519,7 +17794,7 @@ function scrollIntoView(container, selected) {
 "use strict";
 
 var LIBRARY = __webpack_require__(46);
-var $export = __webpack_require__(19);
+var $export = __webpack_require__(20);
 var redefine = __webpack_require__(90);
 var hide = __webpack_require__(12);
 var has = __webpack_require__(10);
@@ -17601,7 +17876,7 @@ module.exports = __webpack_require__(12);
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(20);
+var anObject = __webpack_require__(21);
 var dPs = __webpack_require__(196);
 var enumBugKeys = __webpack_require__(35);
 var IE_PROTO = __webpack_require__(33)('IE_PROTO');
@@ -17799,7 +18074,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
 
 /***/ }),
 /* 96 */
@@ -17992,7 +18267,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(6)))
 
 /***/ }),
 /* 97 */
@@ -18118,7 +18393,7 @@ module.exports = __webpack_require__(101);
 var utils = __webpack_require__(4);
 var bind = __webpack_require__(52);
 var Axios = __webpack_require__(103);
-var defaults = __webpack_require__(27);
+var defaults = __webpack_require__(28);
 
 /**
  * Create an instance of Axios
@@ -18201,7 +18476,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(27);
+var defaults = __webpack_require__(28);
 var utils = __webpack_require__(4);
 var InterceptorManager = __webpack_require__(112);
 var dispatchRequest = __webpack_require__(113);
@@ -18742,7 +19017,7 @@ module.exports = InterceptorManager;
 var utils = __webpack_require__(4);
 var transformData = __webpack_require__(114);
 var isCancel = __webpack_require__(55);
-var defaults = __webpack_require__(27);
+var defaults = __webpack_require__(28);
 var isAbsoluteURL = __webpack_require__(115);
 var combineURLs = __webpack_require__(116);
 
@@ -22446,7 +22721,7 @@ if (false) {(function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(132);
-module.exports = __webpack_require__(16).Object.assign;
+module.exports = __webpack_require__(17).Object.assign;
 
 
 /***/ }),
@@ -22454,7 +22729,7 @@ module.exports = __webpack_require__(16).Object.assign;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(19);
+var $export = __webpack_require__(20);
 
 $export($export.S + $export.F, 'Object', { assign: __webpack_require__(135) });
 
@@ -22502,15 +22777,15 @@ module.exports = function (it) {
 "use strict";
 
 // 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = __webpack_require__(22);
+var getKeys = __webpack_require__(23);
 var gOPS = __webpack_require__(36);
-var pIE = __webpack_require__(24);
+var pIE = __webpack_require__(25);
 var toObject = __webpack_require__(68);
 var IObject = __webpack_require__(66);
 var $assign = Object.assign;
 
 // should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(18)(function () {
+module.exports = !$assign || __webpack_require__(19)(function () {
   var A = {};
   var B = {};
   // eslint-disable-next-line no-undef
@@ -23339,29 +23614,327 @@ var render = function() {
         "el-col",
         { attrs: { xs: 12 } },
         [
-          _c("el-card", { staticClass: "box-card" }, [
-            _c(
-              "div",
-              {
-                staticClass: "clearfix",
-                attrs: { slot: "header" },
-                slot: "header"
-              },
-              [
-                _c("span", [_vm._v("用户管理")]),
-                _vm._v(" "),
-                _c(
-                  "el-button",
-                  {
-                    staticStyle: { float: "right", padding: "3px 0" },
-                    attrs: { type: "text" }
-                  },
-                  [_vm._v("添加用户")]
-                )
-              ],
-              1
-            )
-          ])
+          _c(
+            "el-card",
+            { staticClass: "box-card" },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "clearfix",
+                  attrs: { slot: "header" },
+                  slot: "header"
+                },
+                [
+                  _c("span", [_vm._v("用户管理")]),
+                  _vm._v(" "),
+                  _c(
+                    "el-button",
+                    {
+                      staticStyle: { float: "right", padding: "3px 0" },
+                      attrs: { type: "text" },
+                      on: {
+                        click: function($event) {
+                          _vm.showModal("add")
+                        }
+                      }
+                    },
+                    [_vm._v("添加用户")]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-table",
+                {
+                  staticStyle: { width: "100%" },
+                  attrs: { data: _vm.users, stripe: "" }
+                },
+                [
+                  _c("el-table-column", {
+                    attrs: { prop: "mobile", label: "手机号" }
+                  }),
+                  _vm._v(" "),
+                  _c("el-table-column", {
+                    attrs: { prop: "id_name", label: "姓名" }
+                  }),
+                  _vm._v(" "),
+                  _c("el-table-column", {
+                    attrs: { prop: "occupation", label: "职业" }
+                  }),
+                  _vm._v(" "),
+                  _c("el-table-column", {
+                    attrs: { prop: "group_name", label: "区域组" }
+                  }),
+                  _vm._v(" "),
+                  _c("el-table-column", {
+                    attrs: { prop: "role_name", label: "角色" }
+                  }),
+                  _vm._v(" "),
+                  _c("el-table-column", {
+                    attrs: { label: "操作" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function(scope) {
+                          return [
+                            _c(
+                              "el-button",
+                              { attrs: { type: "text", size: "small" } },
+                              [_vm._v("查看")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "el-button",
+                              {
+                                attrs: { type: "text", size: "small" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.showModal("edit", scope.$index)
+                                  }
+                                }
+                              },
+                              [_vm._v("编辑")]
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: _vm.userAdd ? "添加用户" : "编辑用户",
+            visible: _vm.userModalShow
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.userModalShow = $event
+            }
+          }
+        },
+        [
+          _c(
+            "el-form",
+            {
+              ref: "userForm",
+              attrs: { model: _vm.currentUser, "label-width": "80px" }
+            },
+            [
+              _c(
+                "el-form-item",
+                { attrs: { label: "手机号" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "手机号／用户登入" },
+                    model: {
+                      value: _vm.currentUser.mobile,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentUser, "mobile", $$v)
+                      },
+                      expression: "currentUser.mobile"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.userAdd
+                ? _c(
+                    "el-form-item",
+                    { attrs: { label: "密码" } },
+                    [
+                      _c("el-input", {
+                        attrs: { type: "password", placeholder: "密码" },
+                        model: {
+                          value: _vm.currentUser.password,
+                          callback: function($$v) {
+                            _vm.$set(_vm.currentUser, "password", $$v)
+                          },
+                          expression: "currentUser.password"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "身份证号" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "18位身份证号" },
+                    model: {
+                      value: _vm.currentUser.id_number,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentUser, "id_number", $$v)
+                      },
+                      expression: "currentUser.id_number"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "姓名" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "请输入身份证上的姓名" },
+                    model: {
+                      value: _vm.currentUser.id_name,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentUser, "id_name", $$v)
+                      },
+                      expression: "currentUser.id_name"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "信用代码" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "统一社会信用代码" },
+                    model: {
+                      value: _vm.currentUser.credit_code,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentUser, "credit_code", $$v)
+                      },
+                      expression: "currentUser.credit_code"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "职业" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "请输入用户的职业" },
+                    model: {
+                      value: _vm.currentUser.occupation,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentUser, "occupation", $$v)
+                      },
+                      expression: "currentUser.occupation"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "区域组" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择区域", filterable: "" },
+                      model: {
+                        value: _vm.currentUser.group,
+                        callback: function($$v) {
+                          _vm.$set(_vm.currentUser, "group", $$v)
+                        },
+                        expression: "currentUser.group"
+                      }
+                    },
+                    _vm._l(_vm.selectData.groups, function(group) {
+                      return _c("el-option", {
+                        key: group.id,
+                        attrs: { label: group.group_name, value: group.id }
+                      })
+                    })
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "角色" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择角色", disabled: "" },
+                      model: {
+                        value: _vm.currentUser.role,
+                        callback: function($$v) {
+                          _vm.$set(_vm.currentUser, "role", $$v)
+                        },
+                        expression: "currentUser.role"
+                      }
+                    },
+                    _vm._l(_vm.selectData.roles, function(role) {
+                      return _c("el-option", {
+                        key: role.id,
+                        attrs: { label: role.role_name, value: role.id }
+                      })
+                    })
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.userModalShow = false
+                    }
+                  }
+                },
+                [_vm._v("取 消")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                {
+                  attrs: { type: "primary" },
+                  on: {
+                    click: function($event) {
+                      _vm.submitUser()
+                    }
+                  }
+                },
+                [_vm._v("确 定")]
+              )
+            ],
+            1
+          )
         ],
         1
       )
@@ -23670,7 +24243,7 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RoleList_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_74389a09_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RoleList_vue__ = __webpack_require__(155);
@@ -23746,7 +24319,7 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue__);
 /* harmony namespace reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AssetsList_vue__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_22d26499_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AssetsList_vue__ = __webpack_require__(157);
@@ -23822,13 +24395,18 @@ var render = function() {
                   slot: "header"
                 },
                 [
-                  _c("span", [_vm._v("所有资产")]),
+                  _c("span", [_vm._v("推介资产管理")]),
                   _vm._v(" "),
                   _c(
                     "el-button",
                     {
                       staticStyle: { float: "right", padding: "3px 0" },
-                      attrs: { type: "text" }
+                      attrs: { type: "text" },
+                      on: {
+                        click: function($event) {
+                          _vm.showModal("add")
+                        }
+                      }
                     },
                     [_vm._v("添加资产")]
                   )
@@ -23840,37 +24418,19 @@ var render = function() {
                 "el-table",
                 {
                   staticStyle: { width: "100%" },
-                  attrs: { data: _vm.groups, stripe: "" }
+                  attrs: { data: _vm.properties, stripe: "" }
                 },
                 [
-                  _c("el-table-column", { attrs: { prop: "id", label: "ID" } }),
+                  _c("el-table-column", {
+                    attrs: { type: "index", label: "ID" }
+                  }),
                   _vm._v(" "),
                   _c("el-table-column", {
                     attrs: { prop: "title", label: "资产标题" }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
-                    attrs: { prop: "debt_type", label: "债务类型" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "instruction", label: "资产说明" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "parms", label: "配套信息" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "bond_institution", label: "债券机构" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "obligor", label: "债务人" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "guarantee", label: "保证人" }
+                    attrs: { prop: "debt_type", label: "资产类型" }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
@@ -23878,31 +24438,7 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
-                    attrs: { prop: "spot", label: "资产亮点" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
                     attrs: { prop: "contacts", label: "联系人" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "c_phone", label: "联系人电话" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "fax", label: "传真" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "p_address", label: "通讯地址" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "transaction", label: "交易对象" }
-                  }),
-                  _vm._v(" "),
-                  _c("el-table-column", {
-                    attrs: { prop: "statement", label: "声明" }
                   }),
                   _vm._v(" "),
                   _c("el-table-column", {
@@ -23924,8 +24460,28 @@ var render = function() {
                             _vm._v(" "),
                             _c(
                               "el-button",
-                              { attrs: { type: "text", size: "small" } },
+                              {
+                                attrs: { type: "text", size: "small" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.showModal("edit", scope.$index)
+                                  }
+                                }
+                              },
                               [_vm._v("编辑")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "el-button",
+                              {
+                                attrs: { type: "text", size: "small" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.deleteProperty(scope.$index)
+                                  }
+                                }
+                              },
+                              [_vm._v("删除")]
                             )
                           ]
                         }
@@ -23934,6 +24490,322 @@ var render = function() {
                   })
                 ],
                 1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "el-dialog",
+        {
+          attrs: {
+            title: _vm.propertyAdd ? "添加资产" : "编辑资产信息",
+            visible: _vm.propertyModal
+          },
+          on: {
+            "update:visible": function($event) {
+              _vm.propertyModal = $event
+            }
+          }
+        },
+        [
+          _c(
+            "el-form",
+            {
+              ref: "categoryForm",
+              attrs: { model: _vm.currentProperty, "label-width": "80px" }
+            },
+            [
+              _c(
+                "el-form-item",
+                { attrs: { label: "资产标题" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.title,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "title", $$v)
+                      },
+                      expression: "currentProperty.title"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "资产类型" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.debt_type,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "debt_type", $$v)
+                      },
+                      expression: "currentProperty.debt_type"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "资产说明" } },
+                [
+                  _c("el-input", {
+                    attrs: { type: "textarea" },
+                    model: {
+                      value: _vm.propertyInstr,
+                      callback: function($$v) {
+                        _vm.propertyInstr = $$v
+                      },
+                      expression: "propertyInstr"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "配套信息" } },
+                [
+                  _c("el-input", {
+                    attrs: { type: "textarea" },
+                    model: {
+                      value: _vm.propertyParms,
+                      callback: function($$v) {
+                        _vm.propertyParms = $$v
+                      },
+                      expression: "propertyParms"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "债权机构" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.bond_institution,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "bond_institution", $$v)
+                      },
+                      expression: "currentProperty.bond_institution"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "债务人" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.obligor,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "obligor", $$v)
+                      },
+                      expression: "currentProperty.obligor"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "保证人" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.guarantee,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "guarantee", $$v)
+                      },
+                      expression: "currentProperty.guarantee"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "抵押人" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.mortgagor,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "mortgagor", $$v)
+                      },
+                      expression: "currentProperty.mortgagor"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "资产亮点" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.propertySpot,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "propertySpot", $$v)
+                      },
+                      expression: "currentProperty.propertySpot"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "联系人" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.contacts,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "contacts", $$v)
+                      },
+                      expression: "currentProperty.contacts"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "联系人电话" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.c_phone,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "c_phone", $$v)
+                      },
+                      expression: "currentProperty.c_phone"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "传真" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.fax,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "fax", $$v)
+                      },
+                      expression: "currentProperty.fax"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "通讯地址" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.p_address,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "p_address", $$v)
+                      },
+                      expression: "currentProperty.p_address"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "交易对象" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.transaction,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "transaction", $$v)
+                      },
+                      expression: "currentProperty.transaction"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "声明" } },
+                [
+                  _c("el-input", {
+                    model: {
+                      value: _vm.currentProperty.statement,
+                      callback: function($$v) {
+                        _vm.$set(_vm.currentProperty, "statement", $$v)
+                      },
+                      expression: "currentProperty.statement"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "dialog-footer",
+              attrs: { slot: "footer" },
+              slot: "footer"
+            },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.propertyModal = false
+                    }
+                  }
+                },
+                [_vm._v("取 消")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                {
+                  attrs: { type: "primary" },
+                  on: { click: _vm.submitProperty }
+                },
+                [_vm._v("确 定")]
               )
             ],
             1
@@ -24337,7 +25209,7 @@ module.exports = { "default": __webpack_require__(163), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(164);
-var $Object = __webpack_require__(16).Object;
+var $Object = __webpack_require__(17).Object;
 module.exports = function defineProperty(it, key, desc) {
   return $Object.defineProperty(it, key, desc);
 };
@@ -24347,7 +25219,7 @@ module.exports = function defineProperty(it, key, desc) {
 /* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var $export = __webpack_require__(19);
+var $export = __webpack_require__(20);
 // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
 $export($export.S + $export.F * !__webpack_require__(9), 'Object', { defineProperty: __webpack_require__(8).f });
 
@@ -62961,9 +63833,9 @@ exports.default = aria.Utils;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_typeof__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__util__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__validator___ = __webpack_require__(214);
@@ -63300,7 +64172,7 @@ module.exports = function (TO_STRING) {
 "use strict";
 
 var create = __webpack_require__(91);
-var descriptor = __webpack_require__(21);
+var descriptor = __webpack_require__(22);
 var setToStringTag = __webpack_require__(48);
 var IteratorPrototype = {};
 
@@ -63318,8 +64190,8 @@ module.exports = function (Constructor, NAME, next) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var dP = __webpack_require__(8);
-var anObject = __webpack_require__(20);
-var getKeys = __webpack_require__(22);
+var anObject = __webpack_require__(21);
+var getKeys = __webpack_require__(23);
 
 module.exports = __webpack_require__(9) ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
@@ -63455,7 +64327,7 @@ __webpack_require__(205);
 __webpack_require__(211);
 __webpack_require__(212);
 __webpack_require__(213);
-module.exports = __webpack_require__(16).Symbol;
+module.exports = __webpack_require__(17).Symbol;
 
 
 /***/ }),
@@ -63468,28 +64340,28 @@ module.exports = __webpack_require__(16).Symbol;
 var global = __webpack_require__(7);
 var has = __webpack_require__(10);
 var DESCRIPTORS = __webpack_require__(9);
-var $export = __webpack_require__(19);
+var $export = __webpack_require__(20);
 var redefine = __webpack_require__(90);
 var META = __webpack_require__(206).KEY;
-var $fails = __webpack_require__(18);
+var $fails = __webpack_require__(19);
 var shared = __webpack_require__(34);
 var setToStringTag = __webpack_require__(48);
-var uid = __webpack_require__(23);
+var uid = __webpack_require__(24);
 var wks = __webpack_require__(15);
 var wksExt = __webpack_require__(49);
 var wksDefine = __webpack_require__(50);
 var enumKeys = __webpack_require__(207);
 var isArray = __webpack_require__(208);
-var anObject = __webpack_require__(20);
-var isObject = __webpack_require__(17);
+var anObject = __webpack_require__(21);
+var isObject = __webpack_require__(18);
 var toIObject = __webpack_require__(13);
 var toPrimitive = __webpack_require__(30);
-var createDesc = __webpack_require__(21);
+var createDesc = __webpack_require__(22);
 var _create = __webpack_require__(91);
 var gOPNExt = __webpack_require__(209);
 var $GOPD = __webpack_require__(210);
 var $DP = __webpack_require__(8);
-var $keys = __webpack_require__(22);
+var $keys = __webpack_require__(23);
 var gOPD = $GOPD.f;
 var dP = $DP.f;
 var gOPN = gOPNExt.f;
@@ -63613,7 +64485,7 @@ if (!USE_NATIVE) {
   $GOPD.f = $getOwnPropertyDescriptor;
   $DP.f = $defineProperty;
   __webpack_require__(92).f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(24).f = $propertyIsEnumerable;
+  __webpack_require__(25).f = $propertyIsEnumerable;
   __webpack_require__(36).f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(46)) {
@@ -63703,15 +64575,15 @@ setToStringTag(global.JSON, 'JSON', true);
 /* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var META = __webpack_require__(23)('meta');
-var isObject = __webpack_require__(17);
+var META = __webpack_require__(24)('meta');
+var isObject = __webpack_require__(18);
 var has = __webpack_require__(10);
 var setDesc = __webpack_require__(8).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
   return true;
 };
-var FREEZE = !__webpack_require__(18)(function () {
+var FREEZE = !__webpack_require__(19)(function () {
   return isExtensible(Object.preventExtensions({}));
 });
 var setMeta = function (it) {
@@ -63763,9 +64635,9 @@ var meta = module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(22);
+var getKeys = __webpack_require__(23);
 var gOPS = __webpack_require__(36);
-var pIE = __webpack_require__(24);
+var pIE = __webpack_require__(25);
 module.exports = function (it) {
   var result = getKeys(it);
   var getSymbols = gOPS.f;
@@ -63819,8 +64691,8 @@ module.exports.f = function getOwnPropertyNames(it) {
 /* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE = __webpack_require__(24);
-var createDesc = __webpack_require__(21);
+var pIE = __webpack_require__(25);
+var createDesc = __webpack_require__(22);
 var toIObject = __webpack_require__(13);
 var toPrimitive = __webpack_require__(30);
 var has = __webpack_require__(10);
@@ -63984,7 +64856,7 @@ function whitespace(rule, value, source, errors, options) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__util__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__required__ = __webpack_require__(93);
@@ -64619,7 +65491,7 @@ function date(rule, value, callback, source, options) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_typeof__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__rule___ = __webpack_require__(1);
 

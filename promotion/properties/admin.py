@@ -9,6 +9,9 @@ from promotion.properties.models import Category, Assets, AssetsImg, Comment
 class AssetsImgline(admin.TabularInline):
     model = AssetsImg
 
+class CommentLine(admin.TabularInline):
+	model = Comment
+
 class AssetsAdmin(admin.ModelAdmin):
     list_display = ('title', 'bond_institution', 'contacts', 'guarantee', 'pub_time', 'debt_type')
     search_fields = ('title', 'debt_type', 'contacts')
