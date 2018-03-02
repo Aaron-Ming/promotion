@@ -233,26 +233,32 @@
       },
       submitUser() {
         const method = this.userAdd ? 'post' : 'put'
-        const submitApi = this.userAdd ? '/accounts/users/' : this.$format('/accounts/users/{0}/', this.currentUser.id)
+        const submitApi = this.userAdd ? '/accounts/users/' : '/accounts/users/' + this.currentUser.id + '/'
+        const msg = this.userAdd ? '添加' : '修改'
         this.axios({
           method: method,
           url: submitApi,
           data: this.currentUser
         }).then(res => {
-          console.log(res)
-          if(res.status == 201) {
-            const user = res.data
+          const user = res.data
+          if(this.userAdd && res.status == 201) {
             this.currentUser.id = user.id
             this.users.push(user)
             this.$message({
               message: '用户添加成功',
               type: 'success'
             })
+          } else if(res.status == 200) {
+            this.users.splice(this.currentIndex, 1, user)
+            this.$message({
+              message: '用户编辑成功',
+              type: 'success'
+            })
           } else {
             this.$notify.error({
-              title: '用户添加失败',
+              title: '用户'+ msg +'失败',
               duration: 0,
-              message: this.$format('错误代码：{0}, 请联系管理员', res.status)
+              message: '错误代码: '+ res.status +', 请联系管理员'
             })
           }
         }).catch(error => {
