@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from promotion.accounts.views import (GroupViewSet, Login,
-                                      ProfileViewSet, RoleViewSet)
+                                      ProfileViewSet, RoleViewSet,
+                                      check_mobile)
 
 group_list = GroupViewSet.as_view({
     'get': 'list',
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'^users/$', user_list, name='user_list'),
     url(r'^users/(?P<pk>\d+)/$', user_detail, name='user_detail'),
     url(r'^roles/$', role_list, name='role_list'),
+    url(r'^check_mobile/$', check_mobile, name='check_mobile'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
