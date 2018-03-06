@@ -62,62 +62,66 @@
         <el-form-item label="资产标题">
           <el-input v-model="currentProperty.title"></el-input>
         </el-form-item>
+
         <el-form-item label="资产类型">
-          <el-input v-model="currentProperty.debt_type"></el-input>
+          <el-select v-model="currentProperty.debt_type" placeholder="请选择资产类型">
+            <el-option
+              v-for="item in selectData.debType"
+              :key="item.debTypeId"
+              :label="item.debTypeName"
+              :value="item.debTypeName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="资产说明">
-            <el-input type="textarea" v-model="propertyInstr"></el-input>
+          <el-input type="textarea" v-model="currentStr.propertyInstr"></el-input>
         </el-form-item>
         <el-form-item label="配套信息">
-            <el-input type="textarea" v-model="propertyParms"></el-input>
+          <el-input type="textarea" v-model="currentStr.propertyParms"></el-input>
         </el-form-item>
-
-
         <el-form-item label="债权机构">
-            <el-input v-model="currentProperty.bond_institution"></el-input>
+          <el-input v-model="currentProperty.bond_institution"></el-input>
         </el-form-item>
-
         <el-form-item label="债务人">
-            <el-input v-model="currentProperty.obligor"></el-input>
+          <el-input v-model="currentProperty.obligor"></el-input>
         </el-form-item>
-
         <el-form-item label="保证人">
-            <el-input v-model="currentProperty.guarantee"></el-input>
+          <el-input v-model="currentProperty.guarantee"></el-input>
         </el-form-item>
-
         <el-form-item label="抵押人">
-            <el-input v-model="currentProperty.mortgagor"></el-input>
+          <el-input v-model="currentProperty.mortgagor"></el-input>
         </el-form-item>
-
         <el-form-item label="资产亮点">
-            <el-input v-model="currentProperty.propertySpot"></el-input>
+          <el-input  type="textarea" v-model="currentStr.propertySpot"></el-input>
         </el-form-item>
-
         <el-form-item label="联系人">
-            <el-input v-model="currentProperty.contacts"></el-input>
+          <el-input v-model="currentProperty.contacts"></el-input>
         </el-form-item>
-
         <el-form-item label="联系人电话">
-            <el-input v-model="currentProperty.c_phone"></el-input>
+          <el-input v-model="currentProperty.c_phone"></el-input>
         </el-form-item>
-
         <el-form-item label="传真">
-            <el-input v-model="currentProperty.fax"></el-input>
+          <el-input v-model="currentProperty.fax"></el-input>
         </el-form-item>
-
         <el-form-item label="通讯地址">
-            <el-input v-model="currentProperty.p_address"></el-input>
+          <el-input v-model="currentProperty.p_address"></el-input>
         </el-form-item>
-
         <el-form-item label="交易对象">
-            <el-input v-model="currentProperty.transaction"></el-input>
+          <el-input v-model="currentProperty.transaction"></el-input>
         </el-form-item>
-
         <el-form-item label="声明">
-            <el-input v-model="currentProperty.statement"></el-input>
+          <el-input v-model="currentProperty.statement"></el-input>
         </el-form-item>
-
-
+        <el-form-item label="资产种类">
+          <el-select v-model="currentProperty.category_name" placeholder="请选择资产类型">
+            <el-option
+              v-for="item in selectData.categorys"
+              :key="item.id"
+              :label="item.category_name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -133,9 +137,17 @@
   export default {
     data() {
       return {
-        propertyInstr: '',
-        propertyParms: '',
-        propertySpot: '',
+        selectData: {
+          debType: [{
+            debTypeId: 1,
+            debTypeName: '企业'
+          }, {
+            debTypeId: 2,
+            debTypeName: '个人'
+          }],
+          categorys: []
+        },
+        currentStr: {},
         properties: [],
         propertyModal: false,
         propertyAdd: false,
@@ -148,17 +160,32 @@
       this.getProperties()
     },
     methods: {
+      getCategorys() {
+        this.axios.get('/assets/categorys/')
+        .then(res => {
+          if (res.status == 200) {
+            this.selectData.categorys = res.data
+          } else {
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '获取资产类别失败，请联系管理员'
+            })
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      },
       getProperties() {
         this.axios.get(this.propertyUrl)
         .then(res => {
           if (res.status == 200) {
             this.properties = res.data
-            console.log(this.properties)
           } else {
             this.$notify.error({
               title: '出错了',
               duration: 0,
-              message: '错误代码: ' + res.status
+              message: '获取资产列表失败，请联系管理员'
             })
           }
         }).catch(error => {
@@ -166,29 +193,97 @@
         })
       },
       showModal(action, index) {
+        this.getCategorys()
         if(action == 'add') {
           this.propertyAdd = true
           if(this.currentProperty.id) {
             this.currentProperty = {}
+            this.currentStr = {}
           }
         } else if(index>=0) {
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])
+          this.dictToStr()
         }
         this.propertyModal = true
       },
       detailUrl() {
         return this.propertyUrl + this.currentProperty.id + '/'
       },
-      test() {
-        return 'aaa'
+      formatDict(obj) {
+        let reStr = ''
+        for (let key of Object.keys(obj)) {
+          reStr += key+'：'+obj[key]+'\n'
+        }
+        return reStr
+      },
+      formatStr(str) {
+        let keyVal = null
+        let reDict = {}
+        let strArr = str.split('\n')
+        if (strArr[strArr.length-1] === '') {
+          strArr.pop()
+        }
+        for (let v of strArr) {
+          if (v.includes('：') == true) {
+            keyVal = v.split('：')
+          } else if (v.includes(':') == true) {
+            keyVal = v.split(':')
+          } else {
+            this.$notify.error({
+              title: '出错了',
+              duration: 0,
+              message: '请检查资产资产说明、配套信息、资产亮点输入格式'
+            })
+            return false
+          }
+          if (keyVal != null) {
+            reDict[keyVal[0]] = keyVal[1]
+          }
+        }
+        return reDict
+      },
+      dictToStr() {
+        const propertyInstr = this.currentProperty.instruction
+        const propertyParms = this.currentProperty.parms
+        const propertySpot = this.currentProperty.spot
+        this.currentStr.propertyInstr = this.formatDict(propertyInstr)
+        this.currentStr.propertyParms = this.formatDict(propertyParms)
+        this.currentStr.propertySpot = this.formatDict(propertySpot)
+      },
+      strToDict() {
+        this.currentProperty.instruction = this.formatStr(this.currentStr.propertyInstr)
+        this.currentProperty.parms = this.formatStr(this.currentStr.propertyParms)
+        this.currentProperty.spot = this.formatStr(this.currentStr.propertySpot)
+      },
+      setProCate(category, setType) {
+        let newProCate = null
+        if (setType == 'id') {
+          newProCate = this.selectData.categorys.filter(el => {
+            return el.id == category
+          })
+          this.currentProperty.category_name = newProCate[0].category_name
+        } else if (setType == 'name') {
+          newProCate = this.selectData.categorys.filter(el => {
+            return el.category_name == category
+          })
+          this.currentProperty.category_id = newProCate[0].id
+        }
       },
       submitProperty() {
         let submitUrl =  this.propertyUrl
         let method = 'post'
+        this.strToDict()
         if(!this.propertyAdd) {
           submitUrl = this.detailUrl()
           method = 'put'
+        }
+        if (this.currentProperty.hasOwnProperty('category_name') == true) {
+          this.currentProperty.category_id = this.currentProperty.category_name
+          delete this.currentProperty.category_name
+        }
+        if (isNaN(this.currentProperty.category_id) == true) {
+          this.setProCate(this.currentProperty.category_id, 'name')
         }
         this.axios({
           method: method,
@@ -205,12 +300,13 @@
               message: '操作成功！',
               type: 'success'
             })
+            this.setProCate(this.currentProperty.category_id, 'id')
           } else {
             let errorMsg = ''
             this.$notify.error({
               title: '出错了',
               duration: 0,
-              message: res.data
+              message: '添加资产失败，请联系管理员'
             })
           }
           this.propertyModal = false
