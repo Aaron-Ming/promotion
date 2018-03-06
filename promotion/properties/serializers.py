@@ -15,11 +15,11 @@ class CategorySerializer(serializers.ModelSerializer):
                 validator.message = u'资产类型已经存在！'
 
 class PropertySerializer(serializers.ModelSerializer):
-    # pub_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
-    pub_time = serializers.DateTimeField()
     instruction = serializers.JSONField(binary=False)
     parms = serializers.JSONField(binary=False)
     spot = serializers.JSONField(binary=False)
+    category_id = serializers.IntegerField()
+    category_name = serializers.CharField(source='category.category_name', required=False)
 
     class Meta:
         model = Assets
@@ -28,5 +28,5 @@ class PropertySerializer(serializers.ModelSerializer):
                   'obligor', 'guarantee', 'mortgagor',
                   'spot', 'contacts', 'c_phone', 'fax',
                   'p_address', 'transaction', 'statement',
-                  'pub_time', 'category_id')
+                  'pub_time', 'category_id', 'category_id', 'category_name')
 
