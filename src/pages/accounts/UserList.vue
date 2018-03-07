@@ -35,6 +35,14 @@
             label="角色"
           ></el-table-column>
           <el-table-column
+            label="激活"
+          >
+            <template slot-scope="scope">
+              <span v-if="scope.row.active">已激活</span>
+              <span v-else>未激活</span>
+            </template>
+          </el-table-column>
+          <el-table-column
             label="操作"
           >
             <template slot-scope="scope">
