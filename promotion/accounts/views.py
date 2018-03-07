@@ -79,6 +79,7 @@ class RoleViewSet(viewsets.ModelViewSet):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = (IsAdminUser, )
 
     def create(self, request, *args, **kwargs):
         res_data = request.data
@@ -86,6 +87,13 @@ class ProfileViewSet(viewsets.ModelViewSet):
         password = res_data.get('password', '')
         user = User.objects.create_user(username=username, password=password)
         request.data['user'] = user.id
+        creatd_user = request.user
+        if creatd_user.is_superuser:
+            request.data['active'] = True
+        elif hasattr(creatd_user, 'userprofile'):
+            profile = creatd_user.userprofile
+            if profile.role.role_level < 3:  # role_level < 3 为超级管理员／组管理员
+                request.data['active'] = True
         return super(ProfileViewSet, self).create(request, *args, **kwargs)
 
 

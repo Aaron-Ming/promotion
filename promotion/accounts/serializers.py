@@ -47,4 +47,4 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = UserProfile
         fields = ('id', 'mobile', 'id_number', 'credit_code', 'avatar',
                   'id_name', 'occupation', 'role_name', 'group_name',
-                  'role', 'group', 'user')
+                  'role', 'group', 'user', 'active')
