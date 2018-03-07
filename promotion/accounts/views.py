@@ -12,6 +12,7 @@ from rest_framework import viewsets, status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from promotion.accounts.models import (UserProfile, UserGroup,
@@ -21,6 +22,7 @@ from promotion.accounts.serializers import (GroupSerializer,
                                             ProfileSerializer,
                                             RoleSerializer,
                                             UserSerializer)
+from promotion.utils.permissions import IsSuperUser
 
 
 class Login(ObtainAuthToken):
@@ -66,6 +68,7 @@ class Login(ObtainAuthToken):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = UserGroup.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = (IsSuperUser, )
 
 
 class RoleViewSet(viewsets.ModelViewSet):
