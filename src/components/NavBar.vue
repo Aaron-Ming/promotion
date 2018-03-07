@@ -48,25 +48,10 @@
       }
     },
     methods: {
-      logout() {
-        this.axios.post('/v1/user/logout', {user_id: this.$store.state.user.user_id})
-        .then(resposn => {
-          let logoutData = resposn.data
-          if(logoutData.status == '2001' || logoutData.status == '4001') {
-            this.$store.commit(types.LOGOUT)
-            this.$router.push({path: '/login'})
-          } else {
-            this.swal('Oops! 登出失败了哎', 'error')
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.swal('Oops! 出错了', error, 'error')
-        })
-      },
       handleCommand(command) {
         if(command=='logout') {
-          this.logout()
+          this.$store.commit(types.LOGOUT)
+          this.$router.push({path: '/login'})
         }
       }
     }
