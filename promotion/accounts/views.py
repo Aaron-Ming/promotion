@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # from rest_framework import mixins
 # from rest_framework import generics
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -26,12 +26,41 @@ from promotion.accounts.serializers import (GroupSerializer,
 class Login(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):
+        res_data = {}
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
+        if not user.is_staff:
+            return Response({'error_msg': u'权限不足，请登入后台管理员账户'},
+                             status=status.HTTP_403_FORBIDDEN)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        res_data.update({
+            'token': token.key,
+            'is_superuser': user.is_superuser,
+            'is_staff': user.is_staff,
+            'user_id': user.id,
+            'username': user.username,
+            'profile_id': '',
+            'id_name': '',
+            'group_id': '',
+            'group_name': '',
+            'role_id': '',
+            'role_name': '',
+            'role_level': '',
+        })
+        if hasattr(user, 'userprofile'):
+            profile = user.userprofile
+            res_data.update({
+                'profile_id': profile.id,
+                'id_name': profile.id_name,
+                'group_id': profile.group.id,
+                'group_name': profile.group.group.group_name,
+                'role_id': profile.role.id,
+                'role_name': profile.role.role_name,
+                'role_level': profile.role.role_level,
+            })
+        return Response(res_data)
 
 
 class GroupViewSet(viewsets.ModelViewSet):

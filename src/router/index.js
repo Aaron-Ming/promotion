@@ -9,6 +9,7 @@ import GroupList from 'pages/accounts/GroupList'
 import RoleList from 'pages/accounts/RoleList'
 import AssetsList from 'pages/assets/AssetsList'
 import CategoryList from 'pages/assets/CategoryList'
+import store from '../store/store'
 
 Vue.use(Router)
 
@@ -87,19 +88,20 @@ const router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   if(to.meta.requireAuth) {
-//     if(store.state.user.token) {
-//       next()
-//     } else {
-//       next({
-//         path: '/login',
-//         query: {redirect: to.fullPath}
-//       })
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if(to.meta.requireAuth) {
+    if(store.state.user.token) {
+      console.log(store.state.user.token)
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
 
 export default router
