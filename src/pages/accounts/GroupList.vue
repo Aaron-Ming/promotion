@@ -135,7 +135,6 @@
               type: 'success'
             })
           } else {
-            let errorMsg = ''
             this.$notify.error({
               title: '出错了',
               duration: 0,

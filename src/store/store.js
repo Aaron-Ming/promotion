@@ -14,32 +14,46 @@ const setStorage = function (key, value) {
 
 const state = {
   user: {
-    name: getStorage('username') || '',
-    depatment: getStorage('user_depatment') || '',
+    username: getStorage('username') || '',
     user_id: getStorage('user_id') || '',
     token: getStorage('token') || '',
-    avatar: getStorage('user_avatar') || '',
+    is_superuser: getStorage('is_superuser') || '',
+    is_staff: getStorage('is_staff') || '',
+    id_name: getStorage('id_name') || '',
+    profile_id: getStorage('profile_id') || '',
+    group_id: getStorage('group_id') || '',
+    group_name: getStorage('group_name') || '',
+    role_id: getStorage('role_id') || '',
+    role_name: getStorage('role_name') || '',
+    role_level: getStorage('role_level') || '',
   },
 }
 
 const getters = {}
 
+const user_fields = [
+  'token', 'username', 'user_id', 'is_superuser',
+  'is_staff', 'profile_id', 'id_name', 'group_id',
+  'group_name', 'role_id', 'role_name', 'role_level'
+]
+
 const mutations = {
   [types.LOGIN]: (state, data) => {
-    setStorage('token', data.token)
-    setStorage('username', data.name)
-    setStorage('user_depatment', data.depatment)
-    setStorage('user_id', data.user_id)
-    setStorage('user_avatar', data.avatar)
+    for(var field of user_fields) {
+      setStorage(field, data[field])
+    }
     state.user = data
   },
   [types.LOGOUT]: (state) => {
-    localStorage.removeItem('token');
+    for(var field of user_fields) {
+      localStorage.removeItem(field)
+    }
     state.user = {
-      name: '',
-      depatment: '',
+      username: '',
       user_id: '',
-      token: ''
+      token: '',
+      is_staff: '',
+      is_superuser: '',
     }
   },
 }

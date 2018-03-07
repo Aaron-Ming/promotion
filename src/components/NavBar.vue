@@ -17,8 +17,8 @@
       <div class="op-navbar-custom-menu">
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img :src="user.avatar || 'img/user2-160x160.jpg'" class="user-image">
-            {{ user.name }}
+            <!-- <img :src="user.avatar || 'img/user2-160x160.jpg'" class="user-image"> -->
+            {{ user.id_name || user.username }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
