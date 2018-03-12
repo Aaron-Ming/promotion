@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # from rest_framework import mixins
 # from rest_framework import generics
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, mixins
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -57,7 +57,7 @@ class Login(ObtainAuthToken):
                 'profile_id': profile.id,
                 'id_name': profile.id_name,
                 'group_id': profile.group.id,
-                'group_name': profile.group.group.group_name,
+                'group_name': profile.group.group_name,
                 'role_id': profile.role.id,
                 'role_name': profile.role.role_name,
                 'role_level': profile.role.role_level,
@@ -75,30 +75,72 @@ class RoleViewSet(viewsets.ModelViewSet):
     queryset = UserRole.objects.all()
     serializer_class = RoleSerializer
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return UserRole.objects.filter(role_level__gte=2)
+        elif hasattr(user, 'userprofile'):
+            role = user.userprofile.role
+            return UserRole.objects.filter(role_level__gt=role.role_level)
+        return []
+
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAdminUser, )
 
+    def get_queryset(self):
+        user = self.request.user
+        res_users = []
+        if user.is_superuser:
+            res_users = UserProfile.objects.all()
+        elif hasattr(user, 'userprofile'):
+            group = user.userprofile.group
+            res_users = UserProfile.objects.filter(group=group).exclude(id=user.userprofile.id)
+        is_active = self.request.GET.get('active', 'true')
+        if res_users and is_active == 'false':
+            res_users = res_users.filter(active=False)
+        return res_users
+
+    def set_profile_parms(self, request, user):
+        role_level = request.data.get('role_level', 100)
+        active = request.data.get('active', 'no_action')
+        is_staff = role_level < 4
+        if is_staff:
+            user.is_staff = is_staff
+            user.save()
+        request.data['user'] = user.id
+        creatd_user = request.user
+        if creatd_user.is_superuser and active == 'no_action':
+            request.data['active'] = True
+        elif hasattr(creatd_user, 'userprofile') and active == 'no_action':
+            profile = creatd_user.userprofile
+            if profile.role.role_level < 3:  # role_level < 3 为超级管理员／组管理员
+                request.data['active'] = True
+
     def create(self, request, *args, **kwargs):
         res_data = request.data
         username = res_data.get('mobile', '')
         password = res_data.get('password', '')
         user = User.objects.create_user(username=username, password=password)
-        request.data['user'] = user.id
-        creatd_user = request.user
-        if creatd_user.is_superuser:
-            request.data['active'] = True
-        elif hasattr(creatd_user, 'userprofile'):
-            profile = creatd_user.userprofile
-            if profile.role.role_level < 3:  # role_level < 3 为超级管理员／组管理员
-                request.data['active'] = True
+        self.set_profile_parms(request, user)
         return super(ProfileViewSet, self).create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        profile = self.get_object()
+        self.set_profile_parms(request, profile.user)
+        return super(ProfileViewSet, self).update(request, *args, **kwargs)
 
 
 def check_mobile(request):
     mobile = request.GET.get('mobile', '')
+    is_add = request.GET.get('is_add', '')
+    if not is_add == 'true':
+        profile_id = request.GET.get('profile_id', '')
+        profile = UserProfile.objects.get(id=profile_id)
+        if mobile == profile.mobile:
+            return JsonResponse({'is_used': False})
     if User.objects.filter(username=mobile):
         return JsonResponse({'is_used': True})
     else:

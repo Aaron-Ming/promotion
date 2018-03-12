@@ -91,7 +91,6 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if(to.meta.requireAuth) {
     if(store.state.user.token) {
-      console.log(store.state.user.token)
       next()
     } else {
       next({

@@ -27,7 +27,7 @@
           >
           </el-table-column>
           <el-table-column
-            prop="group_admin"
+            prop="group_admin_name"
             label="管理员"
           >
           </el-table-column>
@@ -54,9 +54,9 @@
         <el-form-item label="区域别名">
           <el-input v-model="currentGroup.alias_name" placeholder="英文／拼音 不能重复"></el-input>
         </el-form-item>
-        <el-form-item label="管理员">
+        <!-- <el-form-item label="管理员">
           <el-input v-model="currentGroup.group_admin"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="groupModal = false">取 消</el-button>
