@@ -8,6 +8,12 @@
             style="float: right; padding: 3px 0"
             type="text"
             @click="showModal('add')">添加用户</el-button>
+          <el-button
+            v-if="activeUser.role_level < 3"
+            style="float: right; padding: 3px 10px"
+            type="text"
+            @click="checkActiveType()"
+          >{{ checkTypeData.btnText }}</el-button>
         </div>
         <el-table
           :data="users"
@@ -46,7 +52,21 @@
             label="操作"
           >
             <template slot-scope="scope">
-              <el-button type="text" size="small">查看</el-button>
+              <!-- <el-button type="text" size="small"
+                v-if="activeUser.is_superuser == 'true'"
+                @click="setGroupAdmin(scope.$index)">设为组长</el-button> -->
+              <el-button
+                v-if="activeUser.role_level < 3 && !scope.row.active"
+                type="text" size="small"
+                style="color: #67c23a"
+                @click="changeActive(true, scope.row.id, scope.$index)"
+              >激活</el-button>
+              <el-button
+                v-if="activeUser.role_level < 3 && scope.row.active"
+                type="text" size="small"
+                style="color: #f56c6c"
+                @click="changeActive(false, scope.row.id, scope.$index)"
+              >失效</el-button>
               <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
             </template>
           </el-table-column>
@@ -111,8 +131,11 @@
           </el-input>
         </el-form-item>
         <el-form-item label="区域组" prop="group">
-          <el-select v-model="currentUser.group" placeholder="请选择区域"
-          filterable>
+          <el-select v-model="currentUser.group"
+            placeholder="请选择区域"
+            filterable
+            :disabled="activeUser.is_superuser == 'false'"
+          >
             <el-option
               v-for="group in selectData.groups"
               :key="group.id"
@@ -123,8 +146,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="角色" prop="role">
-          <el-select v-model="currentUser.role" placeholder="请选择角色"
-            disabled>
+          <el-select v-model="currentUser.role"
+            placeholder="请选择角色"
+            :disabled="activeUser.role_level > 2 && activeUser.role_level !== ''"
+          >
             <el-option
               v-for="role in selectData.roles"
               :key="role.id"
@@ -134,6 +159,13 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-alert
+          v-if="selectData.selectedGroupAdmin"
+          title="如果该组已有组长，则原组长会被降级为组业务员"
+          type="warning"
+          close-text="知道了"
+        >
+        </el-alert>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="userModalShow = false">取 消</el-button>
@@ -147,6 +179,7 @@
   export default {
     data() {
       return {
+        activeUser: this.$store.state.user,
         users: [],
         userAdd: false,
         userModalShow: false,
@@ -155,6 +188,11 @@
         selectData: {
           roles: [],
           groups: [],
+          selectedGroupAdmin: false,
+        },
+        checkTypeData: {
+          btnText: '查看未激活',
+          is_active: true
         },
         userRules: {
           mobile: [
@@ -177,12 +215,29 @@
         },
       }
     },
+    watch: {
+      'currentUser.role'(val) {
+        const roles = this.selectData.roles.filter(el => {
+          return el.id == val
+        })
+        if(roles.length > 0) {
+          const role = roles[0]
+          if(role.role_level == 2) {
+            this.selectData.selectedGroupAdmin = true
+          }
+        }
+      }
+    },
     created() {
       this.getUsers()
     },
     methods: {
-      getUsers() {
-        this.axios.get('/accounts/users/')
+      getUsers(is_active=true) {
+        this.axios.get('/accounts/users/', {
+          params: {
+            active: is_active
+          }
+        })
         .then(res => {
           if(res.status == 200) {
             this.users = res.data
@@ -190,38 +245,47 @@
             this.$notify.error({
               title: '获取用户失败',
               duration: 20000,
-              message: this.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+              message: '错误代码：'+res.status+', 请刷新或联系管理员'
             })
           }
         }).catch(error => {
           console.log(error)
         })
       },
-      getRoles() {
-        if(this.selectData.roles.length > 0) {
-          if(this.userAdd) {
-            const defaultRole = this.selectData.roles.filter(el => {
+      checkActiveType() {
+        if(this.checkTypeData.is_active) {
+          this.checkTypeData.is_active = false
+          this.checkTypeData.btnText = '查看全部'
+          this.getUsers(false)
+        } else {
+          this.checkTypeData.is_active = true
+          this.checkTypeData.btnText = '查看未激活'
+          this.getUsers(true)
+        }
+      },
+      setDefaultRole(roleData) {
+        if(this.userAdd && this.activeUser.role_level > 2) {
+          const defaultRole = roleData.filter(el => {
               return el.role_level == 4
             })
             this.currentUser.role = defaultRole[0].id
-          }
-          return false
+        }
+      },
+      getRoles() {
+        if(this.selectData.roles.length > 0) {
+          this.setDefaultRole(this.selectData.roles)
+          return
         }
         this.axios.get('/accounts/roles/')
         .then(res => {
           if(res.status == 200) {
             this.selectData.roles = res.data
-            if(this.userAdd) {
-              const defaultRole = res.data.filter(el => {
-                return el.role_level == 4
-              })
-              this.currentUser.role = defaultRole[0].id
-            }
+            this.setDefaultRole(res.data)
           } else {
             this.$notify.error({
               title: '获取角色失败',
               duration: 20000,
-              message: this.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+              message: '错误代码：'+res.status+', 请刷新或联系管理员',
             })
           }
         }).catch(error => {
@@ -229,6 +293,16 @@
         })
       },
       getGroups() {
+        if(this.activeUser.role_level > 1) {
+          this.selectData.groups = [
+            {
+              id: parseInt(this.activeUser.group_id),
+              group_name: this.activeUser.group_name,
+            }
+          ]
+          this.currentUser.group = parseInt(this.activeUser.group_id)
+          return
+        }
         if(this.selectData.groups.length > 0) {
           return false
         }
@@ -240,27 +314,31 @@
             this.$notify.error({
               title: '获取区域组失败',
               duration: 20000,
-              message: this.$format('错误代码：{0}, 请刷新或联系管理员', res.status)
+              message: '错误代码：'+ res.status + '请刷新或联系管理员'
             })
           }
         }).catch(error => {
           console.log(error)
         })
       },
-      setCurrentUser(index) {
-        if(this.userAdd && this.currentUser.id) {
-          this.currentUser = {role: this.currentUser.role || null}
-        } else if(index>=0) {
+      showModal(action, index=-1) {
+        if(index >= 0) {
           this.currentUser = Object.assign({}, this.users[index])
           this.currentIndex = index
+        } else if(this.currentUser.id) {
+          this.currentUser = {}
         }
-      },
-      showModal(action, index) {
         this.userAdd = action == 'add'
         this.getGroups()
         this.getRoles()
-        this.setCurrentUser(index)
         this.userModalShow = true
+        this.selectData.selectedGroupAdmin = false
+      },
+      updataCurrentUser() {
+        const role = this.selectData.roles.filter(el => {
+          return el.id == this.currentUser.role
+        })
+        this.currentUser.role_level = role[0].role_level
       },
       submitUser() {
         this.$refs['userForm'].validate((valid) => {
@@ -268,6 +346,7 @@
             const method = this.userAdd ? 'post' : 'put'
             const submitApi = this.userAdd ? '/accounts/users/' : '/accounts/users/' + this.currentUser.id + '/'
             const msg = this.userAdd ? '添加' : '修改'
+            this.updataCurrentUser()
             this.axios({
               method: method,
               url: submitApi,
@@ -304,6 +383,83 @@
           }
         })
       },
+      changeActive(is_active, ID, index) {
+        const actionAPI = '/accounts/users/' + ID + '/'
+        const desc = is_active ? '请确认信息是否符合要求，激活后可以正常登入' : '失效后将不可登入应用'
+        const msg = is_active ? '激活此用户？' : '失效此用户？'
+        this.$confirm(desc, msg, {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let updatedUser = Object.assign({}, this.users[index])
+          updatedUser.active = is_active
+          this.axios.put(actionAPI, updatedUser).then(res => {
+            if(res.status == 200) {
+              this.users.splice(index, 1, res.data)
+              this.$message({
+                message: '设置成功',
+                type: 'success'
+              })
+            } else {
+              this.$notify.error({
+                title: '操作失败',
+                duration: 0,
+                message: '错误代码: '+ res.status +', 请联系管理员'
+              })
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
+      },
+      // setGroupAdmin(index) {
+      //   //设置组长，实现方式有问题，后期再考虑下怎么做
+      //   this.$confirm('如果该组存在组长则会被此用户取代', '确认设置？', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     this.currentUser = Object.assign({}, this.users[index])
+      //     this.currentIndex = index
+      //     const submitApi = this.userAdd ? '/accounts/users/' : '/accounts/users/' + this.currentUser.id + '/'
+      //     this.getRoles()
+      //     const groupAdmins = this.selectData.roles.filter(el => {
+      //       return el.role_level == 2
+      //     })
+      //     const role_id = groupAdmins[0].id
+      //     this.currentUser.role = role_id
+      //     this.axios.put(submitApi, this.currentUser)
+      //     .then(res => {
+      //       if(res.status == 200) {
+      //         this.users.splice(this.currentIndex, 1, user)
+      //         this.$message({
+      //           message: '设置成功',
+      //           type: 'success'
+      //         })
+      //       } else {
+      //         this.$notify.error({
+      //           title: '设置组长失败',
+      //           duration: 0,
+      //           message: '错误代码: '+ res.status +', 请联系管理员'
+      //         })
+      //       }
+      //     }).catch(error => {
+      //       console.log(error)
+      //     })
+      //   }).catch(() => {
+      //     console.log(22222)
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消组长设置'
+      //     })
+      //   })
+      // },
       checkMobile(rule, value, callback) {
         if(!value) {
           return callback(new Error('请输入手机号'))
@@ -315,7 +471,11 @@
           } else {
             const checkUrl = '/accounts/check_mobile/'
             this.axios.get(checkUrl, {
-              params: {mobile: value}
+              params: {
+                is_add: this.userAdd,
+                profile_id: this.currentUser.id,
+                mobile: value,
+              }
             }).then(res => {
               const resData = res.data
               if(resData.is_used) {

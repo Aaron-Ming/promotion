@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.signals import post_save
 from django.forms.models import model_to_dict
 
 ROLE_LEVEL = (
@@ -61,3 +62,25 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.id_name
+
+
+def profile_post_save(sender, instance, *args, **kwargs):
+    '''
+        如果superuser创建／编辑用户时：
+        设置角色为group_admin则该用户升级为该组组长
+        原区域组长降级为组会员
+    '''
+    group = instance.group
+    group_admin = group.group_admin
+    if instance.role.alias_name == 'group_admin' and instance != group_admin:
+        group.group_admin = instance
+        group.save()
+        if group_admin:
+            group_user = UserRole.objects.get(alias_name='group_user')
+            group_admin.role = group_user
+            group_admin.save()
+    elif instance.role.alias_name != 'group_admin' and instance == group_admin:
+        group.group_admin = None
+        group.save()
+
+post_save.connect(profile_post_save, sender=UserProfile)

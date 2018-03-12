@@ -57,14 +57,14 @@
                   showClose: true,
                   message: '用户名／密码错误',
                   type: 'error',
-                  duration: 0,
+                  duration: 5000,
                 })
               } else if(res.status == 403) {
                 this.$message({
                   showClose: true,
                   message: res.data.error_msg,
                   type: 'error',
-                  duration: 0,
+                  duration: 5000,
                 })
               } else {
                 this.$store.commit(types.LOGIN, res.data)

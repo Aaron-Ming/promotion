@@ -5,9 +5,12 @@ from promotion.accounts.models import UserGroup, UserProfile, UserRole
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    group_admin_name = serializers.CharField(source='group_admin.id_name', required=False)
+
     class Meta:
         model = UserGroup
-        fields = ('id', 'group_name', 'alias_name', 'group_admin')
+        fields = ('id', 'group_name', 'alias_name', 'group_admin',
+                  'group_admin_name')
 
     def __init__(self, *args, **kwargs):
         super(GroupSerializer, self).__init__(*args, **kwargs)
