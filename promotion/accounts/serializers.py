@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     role_name = serializers.CharField(source='role.role_name', required=False)
     group_name = serializers.CharField(source='group.group_name', required=False)
-    role_level = serializers.CharField(source='role.role_level', required=False)
+    role_level = serializers.IntegerField(source='role.role_level', required=False)
 
     class Meta:
         model = UserProfile
