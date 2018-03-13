@@ -338,10 +338,10 @@
         this.selectData.selectedGroupAdmin = false
       },
       updataCurrentUser() {
-        const role = this.selectData.roles.filter(el => {
-          return el.id == this.currentUser.role
-        })
-        this.currentUser.role_level = role[0].role_level
+        if(this.currentUser.role_level) {
+          delete this.currentUser['role_level']
+        }
+        console.log(this.currentUser)
       },
       submitUser() {
         this.$refs['userForm'].validate((valid) => {
