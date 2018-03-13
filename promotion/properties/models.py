@@ -16,6 +16,9 @@ DEBTS_TYPE = (
 class Category(models.Model):
     category_name = models.CharField(max_length=16, unique=True,
                                      verbose_name=u'资产类型')
+    instruction = JSONField(verbose_name=u'资产说明参数')
+    parms = JSONField(verbose_name=u'资产配套信息参数')
+    spot = JSONField(verbose_name=u'资产亮点参数')
     
     class Meta:
         verbose_name = verbose_name_plural = u'资产分类'
@@ -74,6 +77,14 @@ class Assets(models.Model):
     def get_imgs(self, size='large'):
         imgs = self.assetsimg_set.all()
         return [getattr(img, size).url for img in imgs]
+
+    def assets_imgs(self):
+        imgs = self.assetsimg_set.all()
+        res_imgs = dict.fromkeys(['large', 'middle', 'small'], [])
+        for img_size in res_imgs.keys():
+            res_imgs[img_size] = [getattr(img, img_size).url for img in imgs]
+        return res_imgs
+
 
 
 class AssetsImg(models.Model):
