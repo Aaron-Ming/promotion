@@ -26,6 +26,7 @@ class Category(models.Model):
     def __unicode__(self):
         return self.category_name
 
+
 class Assets(models.Model):
     category = models.ForeignKey(Category, verbose_name=u'分类')
     title = models.CharField(max_length=32, verbose_name=u'资产名称')
@@ -35,7 +36,7 @@ class Assets(models.Model):
     instruction = JSONField(verbose_name=u'资产说明')
     # 配套信息
     parms = JSONField(verbose_name=u'配套信息')
-
+    # 机构
     bond_institution = models.CharField(max_length=32, verbose_name=u'债权机构')
     obligor = models.CharField(max_length=8, verbose_name=u'债务人')
     guarantee = models.CharField(max_length=8, verbose_name=u'保证人')
@@ -50,7 +51,7 @@ class Assets(models.Model):
     # 交易对象及声明
     transaction = models.TextField(verbose_name=u'交易对象')
     statement = models.TextField(verbose_name=u'声明')
-
+    # 创建时间
     pub_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布时间')
 
     class Meta:
@@ -60,31 +61,13 @@ class Assets(models.Model):
         return self.title
 
     @property
-    def json_data(self):
-        dit_data = model_to_dict(self)
-        dit_data['category'] = self.cate_name
-        dit_data['imgs'] = self.get_imgs()
-        # dit_data['spot'] = dit_data['spot']
-        # dit_data['parms'] = dit_data['parms']
-        # dit_data['instruction'] = dit_data['instruction']
-        # print dit_data['instruction']
-        return dit_data
-
-    @property
-    def cate_name(self):
-        return self.category.category_name
-
-    def get_imgs(self, size='large'):
-        imgs = self.assetsimg_set.all()
-        return [getattr(img, size).url for img in imgs]
-
     def assets_imgs(self):
         imgs = self.assetsimg_set.all()
         res_imgs = dict.fromkeys(['large', 'middle', 'small'], [])
         for img_size in res_imgs.keys():
-            res_imgs[img_size] = [getattr(img, img_size).url for img in imgs]
+            tmp_imgs = [{'img_id': img.id, 'img_path': getattr(img, img_size).url} for img in imgs]
+            res_imgs[img_size] = tmp_imgs
         return res_imgs
-
 
 
 class AssetsImg(models.Model):

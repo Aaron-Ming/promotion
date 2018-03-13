@@ -28,5 +28,6 @@ class PropertySerializer(serializers.ModelSerializer):
                   'obligor', 'guarantee', 'mortgagor',
                   'spot', 'contacts', 'c_phone', 'fax',
                   'p_address', 'transaction', 'statement',
-                  'pub_time', 'category_id', 'category_id', 'category_name')
+                  'pub_time', 'category_id', 'category_id',
+                  'category_name', 'assets_imgs')
 

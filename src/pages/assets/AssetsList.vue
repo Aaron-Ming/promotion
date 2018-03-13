@@ -235,10 +235,16 @@
               duration: 0,
               message: '请检查资产资产说明、配套信息、资产亮点输入格式'
             })
-            return false
+            return
           }
           if (keyVal != null) {
-            reDict[keyVal[0]] = keyVal[1]
+            let realDictVal = keyVal[1]
+            let tmpDictVal = parseFloat(keyVal[1])
+            if (isNaN(tmpDictVal) === false) {
+              reDict[keyVal[0]] = tmpDictVal
+            } else {
+              reDict[keyVal[0]] = realDictVal
+            }
           }
         }
         return reDict
