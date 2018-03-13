@@ -56,18 +56,21 @@
                 v-if="activeUser.is_superuser == 'true'"
                 @click="setGroupAdmin(scope.$index)">设为组长</el-button> -->
               <el-button
-                v-if="activeUser.role_level < 3 && !scope.row.active"
+                v-if="activeUser.role_level < scope.row.role_level && !scope.row.active"
                 type="text" size="small"
                 style="color: #67c23a"
                 @click="changeActive(true, scope.row.id, scope.$index)"
               >激活</el-button>
               <el-button
-                v-if="activeUser.role_level < 3 && scope.row.active"
+                v-if="activeUser.role_level < scope.row.role_level && scope.row.active"
                 type="text" size="small"
                 style="color: #f56c6c"
                 @click="changeActive(false, scope.row.id, scope.$index)"
               >失效</el-button>
-              <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
+              <el-button type="text" size="small"
+                v-if="activeUser.role_level < scope.row.role_level || activeUser.profile_id == scope.row.id"
+                @click="showModal('edit', scope.$index)"
+              >编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
