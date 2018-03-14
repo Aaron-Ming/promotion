@@ -13,6 +13,9 @@ ROLE_LEVEL = (
     (4, 'normal_user'),
 )
 
+def profile_img_path(instance, filename):
+    return 'profile_img/{0}/{1}'.format(instance.mobile, filename)
+
 # 用户组
 class UserGroup(models.Model):
     group_name = models.CharField(max_length=15, verbose_name=u'组名称',
@@ -55,6 +58,13 @@ class UserProfile(models.Model):
     role = models.ForeignKey(UserRole, verbose_name=u'角色')
     group = models.ForeignKey('UserGroup', verbose_name=u'用户组', related_name='usergroup')
     active = models.BooleanField(default=False, verbose_name=u'用户是否激活')
+
+    id_face = models.ImageField(upload_to=profile_img_path, verbose_name=u'身份证正面',
+                                blank=True, null=True)
+    id_back = models.ImageField(upload_to=profile_img_path, verbose_name=u'身份证背面',
+                                blank=True, null=True)
+    license = models.ImageField(upload_to=profile_img_path, verbose_name=u'营业执照',
+                                blank=True, null=True)
 
     class Meta:
         verbose_name = verbose_name_plural = u'用户信息'

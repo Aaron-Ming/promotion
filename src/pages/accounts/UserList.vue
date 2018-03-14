@@ -84,7 +84,7 @@
       <el-form
         :model="currentUser"
         :rules="userRules"
-        label-width="80px"
+        label-width="90px"
         ref="userForm"
       >
         <el-form-item label="手机号" prop="mobile">
@@ -119,6 +119,14 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item label="身份证正面">
+          <input ref="id_face" type="file" name="id_face" @change="imgChange('id_face')" id="id_face">
+        </el-form-item>
+        <img :src="currentUser.id_face" class="user-img" v-if="imgShow.id_face">
+        <el-form-item label="身份证反面">
+          <input ref="id_back" type="file" name="id_back" @change="imgChange('id_back')" id="id_back">
+        </el-form-item>
+        <img :src="currentUser.id_back" class="user-img" v-if="imgShow.id_back">
         <el-form-item label="信用代码">
           <el-input
             v-model="currentUser.credit_code"
@@ -133,6 +141,10 @@
           >
           </el-input>
         </el-form-item>
+        <el-form-item label="营业执照">
+          <input ref="license" type="file" name="license" @change="imgChange('license')" id="license">
+        </el-form-item>
+        <img :src="currentUser.license" class="user-img" v-if="imgShow.license">
         <el-form-item label="区域组" prop="group">
           <el-select v-model="currentUser.group"
             placeholder="请选择区域"
@@ -193,6 +205,11 @@
           groups: [],
           selectedGroupAdmin: false,
         },
+        imgShow: {
+          id_face: false,
+          id_back: false,
+          license: false
+        },
         checkTypeData: {
           btnText: '查看未激活',
           is_active: true
@@ -229,7 +246,7 @@
             this.selectData.selectedGroupAdmin = true
           }
         }
-      }
+      },
     },
     created() {
       this.getUsers()
@@ -269,9 +286,9 @@
       setDefaultRole(roleData) {
         if(this.userAdd && this.activeUser.role_level > 2) {
           const defaultRole = roleData.filter(el => {
-              return el.role_level == 4
-            })
-            this.currentUser.role = defaultRole[0].id
+            return el.role_level == 4
+          })
+          this.currentUser.role = defaultRole[0].id
         }
       },
       getRoles() {
@@ -336,12 +353,33 @@
         this.getRoles()
         this.userModalShow = true
         this.selectData.selectedGroupAdmin = false
+        this.imgShow = {
+          id_face: false,
+          id_back: false,
+          license: false
+        }
+        for(let filed in this.imgShow) {
+          if(this.currentUser[filed]) {
+            console.log(filed)
+            this.imgShow[filed] = true
+            // document.getElementById(filed).value = null
+          }
+        }
       },
       updataCurrentUser() {
         if(this.currentUser.role_level) {
           delete this.currentUser['role_level']
         }
-        console.log(this.currentUser)
+      },
+      imgChange(fileID) {
+        let that = this
+        let imgs = this.$refs[fileID].files
+        let reader = new FileReader()
+        reader.onload = (e) => {
+          that.currentUser[fileID] = reader.result
+          that.imgShow[fileID] = true
+        }
+        reader.readAsDataURL(imgs[0])
       },
       submitUser() {
         this.$refs['userForm'].validate((valid) => {
@@ -353,7 +391,7 @@
             this.axios({
               method: method,
               url: submitApi,
-              data: this.currentUser
+              data: this.currentUser,
             }).then(res => {
               const user = res.data
               if(this.userAdd && res.status == 201) {
@@ -526,3 +564,10 @@
     },
   }
 </script>
+
+<style>
+  .user-img {
+    margin-left: 110px;
+    height: 100px;
+  }
+</style>

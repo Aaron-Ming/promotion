@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework import serializers, validators
 from promotion.accounts.models import UserGroup, UserProfile, UserRole
 
+from promotion.utils.fields import Base64ImageField
+
 
 class GroupSerializer(serializers.ModelSerializer):
     group_admin_name = serializers.CharField(source='group_admin.id_name', required=False)
@@ -46,9 +48,13 @@ class ProfileSerializer(serializers.ModelSerializer):
     role_name = serializers.CharField(source='role.role_name', required=False)
     group_name = serializers.CharField(source='group.group_name', required=False)
     role_level = serializers.IntegerField(source='role.role_level', required=False)
+    id_face = Base64ImageField(required=False)
+    id_back = Base64ImageField(required=False)
+    license = Base64ImageField(required=False)
 
     class Meta:
         model = UserProfile
         fields = ('id', 'mobile', 'id_number', 'credit_code', 'avatar',
                   'id_name', 'occupation', 'role_name', 'group_name',
-                  'role', 'group', 'user', 'active', 'role_level')
+                  'role', 'group', 'user', 'active', 'role_level',
+                  'id_face', 'id_back', 'license')
