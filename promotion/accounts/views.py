@@ -129,6 +129,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         profile = self.get_object()
+        # import ipdb;ipdb.set_trace()
         self.set_profile_parms(request, profile.user)
         return super(ProfileViewSet, self).update(request, *args, **kwargs)
 
