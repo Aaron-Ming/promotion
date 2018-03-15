@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers, validators
-from promotion.properties.models import Category, Assets
+from promotion.properties.models import Category, Assets, AssetsImg
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -30,4 +30,9 @@ class PropertySerializer(serializers.ModelSerializer):
                   'p_address', 'transaction', 'statement',
                   'pub_time', 'category_id', 'category_id',
                   'category_name', 'assets_imgs')
+
+class AssetsImgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssetsImg
+        fields = ('id', 'large', 'middle', 'small')
 

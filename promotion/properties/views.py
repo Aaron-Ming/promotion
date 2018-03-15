@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from rest_framework import viewsets
-from promotion.properties.models import (Category, Assets)
-from promotion.properties.serializers import CategorySerializer,PropertySerializer
+from promotion.properties.models import (Category, Assets, AssetsImg)
+from promotion.properties.serializers import CategorySerializer,PropertySerializer,AssetsImgSerializer
 from rest_framework.response import Response
 from django.http.response import HttpResponseBase
 from django.utils.cache import cc_delim_re, patch_vary_headers
-from promotion.utils.dbselecter import Ssql
+from promotion.utils.handler import Ssql
+from rest_framework import status
+from promotion.utils.handler import AssetsImgHandler as AIH
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -25,17 +27,46 @@ class PropertyViewSet(viewsets.ModelViewSet):
                 {'key': 'instruction', 'val': (u'债权本金（万）', (0, 2000))},
                 {'key': 'instruction', 'val': (u'债权利息（万）', (2, 3))}]
         sql = Ssql(keys).sql
-        queryset = Assets.objects.raw(sql)
-        # sql = 'select * from properties_assets where instruction->>"$.产权" = "{}"'
-        # getdata = request.GET.copy()
-        # if getdata.get('year'):
-        #     get_queryset = Assets.objects.raw(sql.format(getdata['year']))
-        #     queryset = self.filter_queryset(get_queryset)
-        # else:
-        #     queryset = self.filter_queryset(self.get_queryset())
+        sql1 = 'select * from properties_assets'
+        queryset = Assets.objects.raw(sql1)
+        # queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        request_data = request.data
+        assets_imgs = request_data.get('assets_imgs', None)
+        assets_id = request_data.get('id')
+        AIH(assets_id, assets_imgs).execute('update')
+        return super(PropertyViewSet, self).update(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        assets_id = serializer.data.get('id')
+        assets_imgs = request.data.get('assets_imgs')
+        AIH(assets_id, assets_imgs).execute('create')
+        # import pdb; pdb.set_trace()
+        assets_imgs = Assets.objects.get(id=assets_id).assets_imgs
+        # serializer.data['assets_imgs'] = assets_imgs
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
+
+    def destroy(self, request, *args, **kwargs):
+        super(PropertyViewSet, self).destroy(request, *args, **kwargs)
+        assets_id = kwargs.get('pk')
+        AIH(assets_id).execute('destroy')
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AssetsImgViewSet(viewsets.ModelViewSet):
+    queryset = AssetsImg.objects.all()
+    serializer_class = AssetsImgSerializer
