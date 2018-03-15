@@ -13,6 +13,11 @@ DEBTS_TYPE = (
     (u'个人', u'个人'),
 )
 
+IMG_TYPE = (
+    (u'middle', u'详情展示图'),
+    (u'small', u'列表封面图')
+)
+
 class Category(models.Model):
     category_name = models.CharField(max_length=16, unique=True,
                                      verbose_name=u'资产类型')
@@ -63,18 +68,25 @@ class Assets(models.Model):
     @property
     def assets_imgs(self):
         imgs = self.assetsimg_set.all()
-        res_imgs = dict.fromkeys(['large', 'middle', 'small'], [])
-        for img_size in res_imgs.keys():
-            tmp_imgs = [{'img_id': img.id, 'img_path': getattr(img, img_size).url} for img in imgs]
-            res_imgs[img_size] = tmp_imgs
+        res_imgs = {'middle': [], 'small': []}
+        # res_imgs = dict.fromkeys(['middle', 'small'], [])
+        for img in imgs:
+            tmp_imgs = {'id': img.id, 
+                        'src': img.assets_img.url,
+                        'show': True}
+            res_imgs[img.img_type].append(tmp_imgs)
+        if not len(res_imgs['small']):
+            noImg = {'id': None,
+                     'src': None,
+                     'show': False}
+            res_imgs['small'].append(noImg)
         return res_imgs
 
 
 class AssetsImg(models.Model):
     assets = models.ForeignKey(Assets, verbose_name=u'资产')
-    large = models.ImageField(upload_to='%Y/%m/%d/')
-    middle = models.ImageField(upload_to='%Y/%m/%d/')
-    small = models.ImageField(upload_to='%Y/%m/%d/')
+    assets_img = models.ImageField(upload_to='%Y/%m/%d/')
+    img_type = models.CharField(max_length=16, verbose_name=u'图片类型', choices=IMG_TYPE)
 
     class Meta:
         verbose_name = verbose_name_plural = u'资产图片'

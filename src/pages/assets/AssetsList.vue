@@ -45,8 +45,8 @@
             label="操作"
           >
             <template slot-scope="scope">
-              <el-button type="text" size="small">查看</el-button>
-              <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
+              <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=false">查看</el-button>
+              <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=true">编辑</el-button>
               <el-button type="text" size="small" @click="deleteProperty(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
@@ -123,8 +123,28 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="详情图片">
+          <div v-for="(imgInput, index) in imgBuildParm.middle">
+            <input type="file" @change="tirggerFile(index, 'middle', $event)" />
+            <i class="el-icon-circle-close
+" style="color: #F56C6C" @click="autoDelImg('middle', index)"></i>
+            <div>
+              <img style="height: 150px" :src="imgInput.src" alt="" v-show="imgInput.show">
+            </div>
+          </div>
+          <button type="submit" @click="autoAddImg('middle')">添加</button>
+        </el-form-item>
+
+        <el-form-item label="封面图片">
+          <div v-for="(imgInput, index) in imgBuildParm.small">
+            <input type="file" @change="tirggerFile(index, 'small', $event)" />
+            <div>
+              <img style="height: 100px" :src="imgInput.src" alt="" v-show="imgInput.show">
+            </div>
+          </div>
+        </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" v-show="modalButton">
         <el-button @click="propertyModal = false">取 消</el-button>
         <el-button type="primary" @click="submitProperty">确 定</el-button>
       </div>
@@ -137,6 +157,8 @@
   export default {
     data() {
       return {
+        modalButton: true,
+        imgBuildParm: {},
         selectData: {
           debType: [{
             debTypeId: 1,
@@ -158,8 +180,43 @@
     },
     created() {
       this.getProperties()
+      this.initImgBuilder()
     },
     methods: {
+      initImgBuilder() {
+        let imgInit = {'middle': [], 
+                       'small': [{
+                         'src': null,
+                         'id': null,
+                         'show': false,
+                       }]
+                    }
+        this.imgBuildParm = imgInit
+      },
+      tirggerFile: function(index, imgsize, event) {
+        let imgBuilder = this.currentProperty.assets_imgs
+        let file = event.target.files || event.dataTransfer.files;  
+        if (!file.length) return;
+        let leng = file.length
+        for (let i = 0; i < leng; i++) {
+          let reader = new window.FileReader()
+          reader.readAsDataURL(file[i])
+          reader.onload = function (event) {
+            imgBuilder[imgsize][index].src = event.target.result
+            imgBuilder[imgsize][index].show = true
+          }
+        }
+        // console.log(this.currentProperty)
+      },
+      autoAddImg(imgSize) {
+        let newImgObj = {'src': null, 'id': null, 'show': false}
+        let currentPropertyImg = this.currentProperty.assets_imgs
+        currentPropertyImg[imgSize].push(newImgObj)
+      },
+      autoDelImg(imgSize, index) {
+        let currentPropertyImg = this.currentProperty.assets_imgs
+        currentPropertyImg[imgSize].splice(index, 1)
+      },
       getCategorys() {
         this.axios.get('/assets/categorys/')
         .then(res => {
@@ -199,10 +256,15 @@
           if(this.currentProperty.id) {
             this.currentProperty = {}
             this.currentStr = {}
+            this.initImgBuilder()
           }
+          this.currentProperty.assets_imgs = this.imgBuildParm
         } else if(index>=0) {
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])
+          // console.log()
+          this.imgBuildParm = this.currentProperty.assets_imgs
+          console.log(this.imgBuildParm)
           this.dictToStr()
         }
         this.propertyModal = true
@@ -218,6 +280,13 @@
         return reStr
       },
       formatStr(str) {
+        if (str === undefined) {
+          this.$notify.error({
+            title: '出错了',
+            duration: 0,
+            message: '资产资产说明、配套信息、资产亮点不能为空'
+          })
+        }
         let keyVal = null
         let reDict = {}
         let strArr = str.split('\n')
@@ -312,7 +381,7 @@
             this.$notify.error({
               title: '出错了',
               duration: 0,
-              message: '添加资产失败，请联系管理员'
+              message: '添加或修改资产信息失败，请联系管理员'
             })
           }
           this.propertyModal = false
