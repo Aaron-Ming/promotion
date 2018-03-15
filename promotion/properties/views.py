@@ -52,19 +52,15 @@ class PropertyViewSet(viewsets.ModelViewSet):
         assets_id = serializer.data.get('id')
         assets_imgs = request.data.get('assets_imgs')
         AIH(assets_id, assets_imgs).execute('create')
-        # import pdb; pdb.set_trace()
         assets_imgs = Assets.objects.get(id=assets_id).assets_imgs
-        # serializer.data['assets_imgs'] = assets_imgs
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-
+        serializer_data = serializer.data
+        serializer_data['assets_imgs'] = assets_imgs
+        return Response(serializer_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def destroy(self, request, *args, **kwargs):
-        super(PropertyViewSet, self).destroy(request, *args, **kwargs)
         assets_id = kwargs.get('pk')
         AIH(assets_id).execute('destroy')
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return super(PropertyViewSet, self).destroy(request, *args, **kwargs)
 
 
 class AssetsImgViewSet(viewsets.ModelViewSet):

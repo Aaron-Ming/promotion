@@ -104,7 +104,6 @@ class AssetsImgHandler:
 
     def _cleanFromDisk(self, imgFieldFile):
         img_path = imgFieldFile.path
-        print img_path
         storage = imgFieldFile.storage
         storage.delete(img_path)
         return True
