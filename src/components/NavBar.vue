@@ -5,7 +5,7 @@
         <b>OP</b>
       </span>
       <span class="logo-lg" v-show="!logoMini">
-        <b>运维平台</b>
+        <b>资产推介平台</b>
       </span>
     </a>
     <nav class="op-navbar">
