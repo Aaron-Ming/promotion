@@ -19,6 +19,7 @@ class PropertySerializer(serializers.ModelSerializer):
     parms = serializers.JSONField(binary=False)
     spot = serializers.JSONField(binary=False)
     category_id = serializers.IntegerField()
+    author_id = serializers.IntegerField()
     category_name = serializers.CharField(source='category.category_name', required=False)
 
     class Meta:
@@ -28,8 +29,8 @@ class PropertySerializer(serializers.ModelSerializer):
                   'obligor', 'guarantee', 'mortgagor',
                   'spot', 'contacts', 'c_phone', 'fax',
                   'p_address', 'transaction', 'statement',
-                  'pub_time', 'category_id', 'category_id',
-                  'category_name', 'assets_imgs')
+                  'pub_time', 'category_id', 'author_id',
+                  'category_name', 'assets_imgs',)
 
 class AssetsImgSerializer(serializers.ModelSerializer):
     class Meta:
