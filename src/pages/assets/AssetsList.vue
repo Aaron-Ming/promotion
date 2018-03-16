@@ -260,6 +260,7 @@
           }
           this.currentProperty.assets_imgs = this.imgBuildParm
         } else if(index>=0) {
+          this.propertyAdd = false
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])
           // console.log()
