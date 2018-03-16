@@ -252,7 +252,6 @@
       showModal(action, index) {
         this.getCategorys()
         if(action == 'add') {
-          console.log('add1111111111111111111')
           this.propertyAdd = true
           if(this.currentProperty.id) {
             this.currentProperty = {}
@@ -261,7 +260,6 @@
           }
           this.currentProperty.assets_imgs = this.imgBuildParm
         } else if(index>=0) {
-          console.log('edit2222222222222222')
           this.propertyAdd = false
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])

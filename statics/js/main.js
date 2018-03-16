@@ -17039,7 +17039,6 @@ exports.default = {
     showModal: function showModal(action, index) {
       this.getCategorys();
       if (action == 'add') {
-        console.log('add1111111111111111111');
         this.propertyAdd = true;
         if (this.currentProperty.id) {
           this.currentProperty = {};
@@ -17048,7 +17047,6 @@ exports.default = {
         }
         this.currentProperty.assets_imgs = this.imgBuildParm;
       } else if (index >= 0) {
-        console.log('edit2222222222222222');
         this.propertyAdd = false;
         this.currentIndex = index;
         this.currentProperty = (0, _assign2.default)({}, this.properties[index]);
