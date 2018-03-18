@@ -92,12 +92,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        res_users = []
-        if user.is_superuser:
-            res_users = UserProfile.objects.all()
-        elif hasattr(user, 'userprofile'):
+        res_users = UserProfile.objects.filter(user__is_superuser=False)
+        if hasattr(user, 'userprofile'):
             group = user.userprofile.group
-            res_users = UserProfile.objects.filter(group=group)
+            res_users = res_users.filter(group=group)
         is_active = self.request.GET.get('active', 'true')
         if res_users and is_active == 'false':
             res_users = res_users.filter(active=False)

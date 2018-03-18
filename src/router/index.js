@@ -26,7 +26,14 @@ const router = new Router({
       component: Base,
       redirect: 'home',
       children: [
-        {path: 'home', component: Home, name: '首页'},
+        {
+          path: 'home',
+          component: Home,
+          name: '首页',
+          meta: {
+            requireAuth: true
+          }
+        },
         {
           path: 'group_list',
           component: GroupList,
@@ -51,14 +58,14 @@ const router = new Router({
             requireAuth: true
           }
         },
-        {
-          path: 'role_list',
-          component: RoleList,
-          name: '角色管理',
-          meta: {
-            requireAuth: true
-          }
-        }
+        // {
+        //   path: 'role_list',
+        //   component: RoleList,
+        //   name: '角色管理',
+        //   meta: {
+        //     requireAuth: true
+        //   }
+        // }
       ]
     },
     {

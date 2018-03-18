@@ -63,7 +63,7 @@
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
   }
   .el-menu {
-    min-height: 100px;
+    /*min-height: 100px;*/
     height: 100%;
   }
 </style>
