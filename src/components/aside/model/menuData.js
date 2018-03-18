@@ -14,10 +14,6 @@ const menuData = [
       {
         "name": "会员信息",
         "path": "/accounts/user_list"
-      },
-      {
-        "name": "角色管理",
-        "path": "/accounts/role_list"
       }
     ]
   },

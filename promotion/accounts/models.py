@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
-from django.forms.models import model_to_dict
+
 
 ROLE_LEVEL = (
     (1, 'super_admin'),
@@ -47,7 +47,8 @@ class UserRole(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=u'用户')
     mobile = models.CharField(max_length=15, verbose_name=u'手机号')
-    id_number = models.CharField(max_length=20, verbose_name=u'身份证号')
+    id_number = models.CharField(max_length=20, verbose_name=u'身份证号',
+                                 blank=True, null=True)
     credit_code = models.CharField(max_length=64, verbose_name=u'统一社会信用代码',
                                    blank=True, null=True)
     avatar = models.CharField(max_length=256, verbose_name=u'头像',

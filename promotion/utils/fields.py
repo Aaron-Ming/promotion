@@ -3,9 +3,12 @@
     放置一些自定义的 field 类型
 '''
 import base64
+import six
+import uuid
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
+from django.core.files.base import ContentFile
 
 
 class Base64ImageField(serializers.ImageField):
@@ -20,11 +23,6 @@ class Base64ImageField(serializers.ImageField):
     """
     
     def to_internal_value(self, data):
-        from django.core.files.base import ContentFile
-        import base64
-        import six
-        import uuid
-
         # Check if this is a base64 string
         if isinstance(data, six.string_types):
             # Check if the base64 string is in the "data:" format

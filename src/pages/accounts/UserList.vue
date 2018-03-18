@@ -20,6 +20,27 @@
           stripe
           style="width: 100%"
         >
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <el-form-item label="身份证号">
+                  <span>{{ props.row.id_number }}</span>
+                </el-form-item>
+                <el-form-item label="信用代码">
+                  <span>{{ props.row.credit_code }}</span>
+                </el-form-item>
+                <el-form-item label="身份证正面">
+                  <img :src="props.row.id_face" class="expand-img">
+                </el-form-item>
+                <el-form-item label="身份证反面">
+                  <img :src="props.row.id_back" class="expand-img">
+                </el-form-item>
+                <el-form-item label="营业执照">
+                  <img :src="props.row.license" class="expand-img">
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="mobile"
             label="手机号"
@@ -105,46 +126,6 @@
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="身份证号" prop="id_number">
-          <el-input
-            v-model="currentUser.id_number"
-            placeholder="18位身份证号"
-          >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="id_name">
-          <el-input
-            v-model="currentUser.id_name"
-            placeholder="请输入身份证上的姓名"
-          >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="身份证正面">
-          <input ref="id_face" type="file" name="id_face" @change="imgChange('id_face')" id="id_face">
-        </el-form-item>
-        <img :src="currentUser.id_face" class="user-img" v-if="imgShow.id_face">
-        <el-form-item label="身份证反面">
-          <input ref="id_back" type="file" name="id_back" @change="imgChange('id_back')" id="id_back">
-        </el-form-item>
-        <img :src="currentUser.id_back" class="user-img" v-if="imgShow.id_back">
-        <el-form-item label="信用代码">
-          <el-input
-            v-model="currentUser.credit_code"
-            placeholder="统一社会信用代码"
-          >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="职业">
-          <el-input
-            v-model="currentUser.occupation"
-            placeholder="请输入用户的职业"
-          >
-          </el-input>
-        </el-form-item>
-        <el-form-item label="营业执照">
-          <input ref="license" type="file" name="license" @change="imgChange('license')" id="license">
-        </el-form-item>
-        <img :src="currentUser.license" class="user-img" v-if="imgShow.license">
         <el-form-item label="区域组" prop="group">
           <el-select v-model="currentUser.group"
             placeholder="请选择区域"
@@ -174,14 +155,72 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-alert
+        <el-form-item label="姓名" prop="id_name">
+          <el-input
+            v-model="currentUser.id_name"
+            placeholder="请输入身份证上的姓名"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="id_number"
+          v-if="currentUser.role > 3"
+        >
+          <el-input
+            v-model="currentUser.id_number"
+            placeholder="18位身份证号"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="身份证正面"
+          v-if="currentUser.role > 3"
+        >
+          <input ref="id_face" type="file" name="id_face" @change="imgChange('id_face')" id="id_face">
+        </el-form-item>
+        <img :src="currentUser.id_face" class="user-img" v-if="imgShow.id_face && currentUser.role > 3"
+          id="id_face_src"
+        >
+        <el-form-item label="身份证反面"
+          v-if="currentUser.role > 3"
+        >
+          <input ref="id_back" type="file" name="id_back" @change="imgChange('id_back')" id="id_back">
+        </el-form-item>
+        <img :src="currentUser.id_back" class="user-img" v-if="imgShow.id_back && currentUser.role > 3"
+          id="id_back_src"
+        >
+        <el-form-item label="信用代码"
+          v-if="currentUser.role > 3"
+        >
+          <el-input
+            v-model="currentUser.credit_code"
+            placeholder="统一社会信用代码"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="职业"
+          v-if="currentUser.role > 3"
+        >
+          <el-input
+            v-model="currentUser.occupation"
+            placeholder="请输入用户的职业"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="营业执照"
+          v-if="currentUser.role > 3"
+        >
+          <input ref="license" type="file" name="license" @change="imgChange('license')" id="license">
+        </el-form-item>
+        <img :src="currentUser.license" class="user-img" v-if="imgShow.license && currentUser.role > 3"
+          id="license_src"
+        >
+      </el-form>
+      <el-alert
           v-if="selectData.selectedGroupAdmin"
           title="如果该组已有组长，则原组长会被降级为组业务员"
           type="warning"
           close-text="知道了"
         >
         </el-alert>
-      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="userModalShow = false">取 消</el-button>
         <el-button type="primary" @click="submitUser()">确 定</el-button>
@@ -342,9 +381,12 @@
         })
       },
       showModal(action, index=-1) {
+        console.log(this.currentUser)
         if(index >= 0) {
-          this.currentUser = Object.assign({}, this.users[index])
-          this.currentIndex = index
+          if(this.currentUser.id != this.users[index].id) {
+            this.currentUser = Object.assign({}, this.users[index])
+            this.currentIndex = index
+          }
         } else if(this.currentUser.id) {
           this.currentUser = {}
         }
@@ -360,8 +402,9 @@
         }
         for(let filed in this.imgShow) {
           if(this.currentUser[filed]) {
-            console.log(filed)
             this.imgShow[filed] = true
+            console.log(1111111)
+            console.log(this.currentUser[filed])
             // document.getElementById(filed).value = null
           }
         }
@@ -370,16 +413,25 @@
         if(this.currentUser.role_level) {
           delete this.currentUser['role_level']
         }
+        for(let filed in this.imgShow) {
+          if(!this.currentUser[filed].startsWith('data:image')) {
+            delete this.currentUser[filed]
+          }
+        }
       },
       imgChange(fileID) {
-        let that = this
-        let imgs = this.$refs[fileID].files
-        let reader = new FileReader()
+        const srcId = fileID + '_src'
+        console.log(srcId)
+        const that = this
+        const img = this.$refs[fileID].files[0]
+        const imgSize = img.size && img.size / Math.pow(1000, 2)
+        const reader = new FileReader()
         reader.onload = (e) => {
           that.currentUser[fileID] = reader.result
           that.imgShow[fileID] = true
+          document.getElementById(srcId).src = reader.result
         }
-        reader.readAsDataURL(imgs[0])
+        reader.readAsDataURL(img)
       },
       submitUser() {
         this.$refs['userForm'].validate((valid) => {
@@ -403,6 +455,7 @@
                 })
               } else if(res.status == 200) {
                 this.users.splice(this.currentIndex, 1, user)
+                this.currentUser = user
                 this.$message({
                   message: '用户编辑成功',
                   type: 'success'
@@ -569,5 +622,20 @@
   .user-img {
     margin-left: 110px;
     height: 100px;
+  }
+  .expand-img {
+    width: 300px;
+  }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 48%;
   }
 </style>
