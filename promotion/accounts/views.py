@@ -102,7 +102,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return res_users
 
     def set_profile_parms(self, request, user):
-        role_level = request.data.get('role_level', 100)
+        role = UserRole.objects.get(id=request.data.get('role'))
+        role_level = role.role_level
         active = request.data.get('active', 'no_action')
         is_staff = role_level < 4
         if is_staff:
