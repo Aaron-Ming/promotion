@@ -56,6 +56,8 @@ class Assets(models.Model):
     # 交易对象及声明
     transaction = models.TextField(verbose_name=u'交易对象')
     statement = models.TextField(verbose_name=u'声明')
+    # 资产创建者
+    author = models.ForeignKey(User, verbose_name=u'创建人')
     # 创建时间
     pub_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布时间')
 

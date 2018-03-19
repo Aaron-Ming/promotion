@@ -47,7 +47,7 @@
             <template slot-scope="scope">
               <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=false">查看</el-button>
               <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=true">编辑</el-button>
-              <el-button type="text" size="small" @click="deleteProperty(scope.$index)">删除</el-button>
+              <el-button type="text" style="color: #f56c6c" size="small" @click="deleteProperty(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -157,6 +157,7 @@
   export default {
     data() {
       return {
+        activeUser: this.$store.state.user,
         modalButton: true,
         imgBuildParm: {},
         selectData: {
@@ -361,6 +362,10 @@
         if (isNaN(this.currentProperty.category_id) == true) {
           this.setProCate(this.currentProperty.category_id, 'name')
         }
+        // console.log(this.activeUser)
+        // console.log(11111111)
+        this.currentProperty.author_id = parseInt(this.activeUser.user_id)
+        console.log(this.currentProperty)
         this.axios({
           method: method,
           data: this.currentProperty,

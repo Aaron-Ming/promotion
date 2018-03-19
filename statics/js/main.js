@@ -16941,6 +16941,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   data: function data() {
     return {
+      activeUser: this.$store.state.user,
       modalButton: true,
       imgBuildParm: {},
       selectData: {
@@ -17194,6 +17195,9 @@ exports.default = {
       if (isNaN(this.currentProperty.category_id) == true) {
         this.setProCate(this.currentProperty.category_id, 'name');
       }
+
+      this.currentProperty.author_id = parseInt(this.activeUser.user_id);
+      console.log(this.currentProperty);
       this.axios({
         method: method,
         data: this.currentProperty,
@@ -25819,6 +25823,7 @@ var render = function() {
                             _c(
                               "el-button",
                               {
+                                staticStyle: { color: "#f56c6c" },
                                 attrs: { type: "text", size: "small" },
                                 on: {
                                   click: function($event) {
