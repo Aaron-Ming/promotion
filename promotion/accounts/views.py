@@ -2,26 +2,21 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 # from rest_framework import mixins
 # from rest_framework import generics
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from promotion.accounts.models import (UserProfile, UserGroup,
                                        UserRole)
-from promotion.accounts.forms import UserGroupForm
 from promotion.accounts.serializers import (GroupSerializer,
                                             ProfileSerializer,
-                                            RoleSerializer,
-                                            UserSerializer)
+                                            RoleSerializer)
 from promotion.utils.permissions import IsSuperUser
 
 
@@ -35,7 +30,7 @@ class Login(ObtainAuthToken):
         user = serializer.validated_data['user']
         if not user.is_staff:
             return Response({'error_msg': u'权限不足，请登入后台管理员账户'},
-                             status=status.HTTP_403_FORBIDDEN)
+                            status=status.HTTP_403_FORBIDDEN)
         token, created = Token.objects.get_or_create(user=user)
         res_data.update({
             'token': token.key,
@@ -53,6 +48,9 @@ class Login(ObtainAuthToken):
         })
         if hasattr(user, 'userprofile'):
             profile = user.userprofile
+            if not profile.active:
+                return Response({'error_msg': u'用户未激活，请联系管理员激活！'},
+                                status=status.HTTP_403_FORBIDDEN)
             res_data.update({
                 'profile_id': profile.id,
                 'id_name': profile.id_name,
@@ -81,7 +79,7 @@ class RoleViewSet(viewsets.ModelViewSet):
             return UserRole.objects.filter(role_level__gte=2)
         elif hasattr(user, 'userprofile'):
             role = user.userprofile.role
-            return UserRole.objects.filter(role_level__gt=role.role_level)
+            return UserRole.objects.filter(role_level__gte=role.role_level)
         return []
 
 
@@ -102,6 +100,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return res_users
 
     def set_profile_parms(self, request, user):
+        print request.data
         role = UserRole.objects.get(id=request.data.get('role'))
         role_level = role.role_level
         active = request.data.get('active', 'no_action')
@@ -128,7 +127,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         profile = self.get_object()
-        # import ipdb;ipdb.set_trace()
+        password = request.data.get('password', None)
+        if password:
+            user = profile.user
+            user.set_password(password)
         self.set_profile_parms(request, profile.user)
         return super(ProfileViewSet, self).update(request, *args, **kwargs)
 

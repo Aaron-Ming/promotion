@@ -112,10 +112,17 @@
           <el-input
             v-model="currentUser.mobile"
             placeholder="手机号／用户登入"
+            :disabled="!userAdd"
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="密码" v-if="userAdd"
+        <div class="change-pwd-btn">
+          <el-button type="text" size="small"
+            v-if="activeUser.role_level < currentUser.role_level || activeUser.profile_id == currentUser.id"
+            @click="restPWD = !restPWD; if(!restPWD) {delete currentUser['password']}"
+          >{{restPWD ? '取消修改' : '修改密码'}}</el-button>
+        </div>
+        <el-form-item label="密码" v-if="userAdd || restPWD"
           prop="password"
           :rules="[{required: true, message: '请设置一个密码', trigger: 'blur'}]"
         >
@@ -144,17 +151,19 @@
         <el-form-item label="角色" prop="role">
           <el-select v-model="currentUser.role"
             placeholder="请选择角色"
-            :disabled="activeUser.role_level > 2 && activeUser.role_level !== ''"
+            :disabled="activeUser.role_level > 2 && activeUser.role_level !== '' || activeUser.profile_id == currentUser.id"
           >
             <el-option
               v-for="role in selectData.roles"
               :key="role.id"
               :label="role.role_name"
               :value="role.id"
+              :disabled="activeUser.role_level >= role.role_level"
             >
             </el-option>
           </el-select>
         </el-form-item>
+
         <el-form-item label="姓名" prop="id_name">
           <el-input
             v-model="currentUser.id_name"
@@ -237,6 +246,7 @@
         users: [],
         userAdd: false,
         userModalShow: false,
+        restPWD: false,
         currentUser: {},
         currentIndex: null,
         selectData: {
@@ -381,7 +391,8 @@
         })
       },
       showModal(action, index=-1) {
-        console.log(this.currentUser)
+        this.restPWD = false
+        delete this.currentUser['password']
         if(index >= 0) {
           if(this.currentUser.id != this.users[index].id) {
             this.currentUser = Object.assign({}, this.users[index])
@@ -636,5 +647,9 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 48%;
+  }
+  .change-pwd-btn {
+    padding-bottom: 10px;
+    margin-left: 100px;
   }
 </style>
