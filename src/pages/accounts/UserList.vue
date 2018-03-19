@@ -403,7 +403,6 @@
         for(let filed in this.imgShow) {
           if(this.currentUser[filed]) {
             this.imgShow[filed] = true
-            console.log(1111111)
             console.log(this.currentUser[filed])
             // document.getElementById(filed).value = null
           }
@@ -414,7 +413,7 @@
           delete this.currentUser['role_level']
         }
         for(let filed in this.imgShow) {
-          if(!this.currentUser[filed].startsWith('data:image')) {
+          if(this.currentUser[filed] && !this.currentUser[filed].startsWith('data:image')) {
             delete this.currentUser[filed]
           }
         }
