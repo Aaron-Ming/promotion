@@ -48,9 +48,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     role_name = serializers.CharField(source='role.role_name', required=False)
     group_name = serializers.CharField(source='group.group_name', required=False)
     role_level = serializers.IntegerField(source='role.role_level', required=False)
-    id_face = Base64ImageField(required=False)
-    id_back = Base64ImageField(required=False)
-    license = Base64ImageField(required=False)
+    id_face = Base64ImageField(required=False, allow_null=True)
+    id_back = Base64ImageField(required=False, allow_null=True)
+    license = Base64ImageField(required=False, allow_null=True)
 
     class Meta:
         model = UserProfile
