@@ -35,7 +35,6 @@
             label="操作"
           >
             <template slot-scope="scope">
-              <el-button type="text" size="small">查看</el-button>
               <el-button type="text" size="small" @click="showModal('edit', scope.$index)">编辑</el-button>
             </template>
           </el-table-column>
