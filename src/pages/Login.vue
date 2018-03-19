@@ -5,7 +5,7 @@
         <h1>欢迎登入资产管理平台</h1>
         <el-form ref="userForm" :model="userForm" :rules="rules" label-width="80px">
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="userForm.username" placeholder="邮箱"></el-input>
+            <el-input v-model="userForm.username" placeholder="账户"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input type="password" v-model="userForm.password" placeholder="密码"></el-input>
