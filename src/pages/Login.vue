@@ -11,7 +11,7 @@
             <el-input type="password" v-model="userForm.password" placeholder="密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" round size="medium" native-type="button" style="width: 100%" @click="login">登入</el-button>
+            <el-button type="primary" round size="medium" native-type="submit" style="width: 100%" @click="login">登入</el-button>
           </el-form-item>
         </el-form>
       </el-col>
