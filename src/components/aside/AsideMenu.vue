@@ -9,7 +9,9 @@
     text-color="#fff"
     active-text-color="#ffd04b"
     >
-      <template v-for="(menu, m_index) in menues">
+      <template v-for="(menu, m_index) in menues"
+        v-if="$store.state.user.role_level <= menu.roleLevel || !menu.roleLevel"
+      >
         <el-submenu
         v-if="menu.treeview && menu.treeviews.length"
         :index="menu.path"

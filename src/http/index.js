@@ -33,6 +33,8 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(response => {
   const status = response.data.status
+  console.log(111111)
+  console.log(status)
   switch(status) {
     case 401:
       store.commit(types.LOGOUT)

@@ -31,7 +31,7 @@ const router = new Router({
           component: Home,
           name: '首页',
           meta: {
-            requireAuth: true
+            requireAuth: true,
           }
         },
         {
