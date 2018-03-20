@@ -6,7 +6,9 @@
           <span>欢迎来到资产推介平台管理后台, 接下来要去往：</span>
         </div>
         <div v-for="menu in menus">
-          <router-link :to="menu.path">{{ menu.name }}</router-link>
+          <router-link :to="menu.path"
+            v-if="$store.state.user.role_level <= menu.roleLevel || !menu.roleLevel"
+          >{{ menu.name }}</router-link>
         </div>
       </el-card>
     </el-col>

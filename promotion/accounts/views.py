@@ -60,6 +60,8 @@ class Login(ObtainAuthToken):
                 'role_name': profile.role.role_name,
                 'role_level': profile.role.role_level,
             })
+        if user.is_superuser:
+            res_data['role_level'] = 1
         return Response(res_data)
 
 
