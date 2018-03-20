@@ -45,9 +45,8 @@
             label="操作"
           >
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=false">查看</el-button>
-              <el-button type="text" size="small" @click="showModal('edit', scope.$index); modalButton=true">编辑</el-button>
-              <el-button type="text" style="color: #f56c6c" size="small" @click="deleteProperty(scope.$index)">删除</el-button>
+              <el-button type="text" size="mini" @click="showModal('show', scope.$index)">查看 | 编辑</el-button>
+              <el-button type="text" style="color: #f56c6c" size="mini" @click="deleteProperty(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -55,16 +54,25 @@
     </el-col>
     <!-- add/edit modal -->
     <el-dialog
-      :title="propertyAdd ? '添加资产' : '编辑资产信息'"
+      :title="propertyAdd ? '添加资产' : '查看 | 编辑资产信息'"
       :visible.sync="propertyModal"
     >
+      <el-switch
+        style="display: block"
+        v-model="inputSwitch"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="查看"
+        inactive-text="编辑">
+      </el-switch>
+
       <el-form :model="currentProperty" label-width="80px" ref="categoryForm">
         <el-form-item label="资产标题">
-          <el-input v-model="currentProperty.title"></el-input>
+          <el-input v-model="currentProperty.title" :disabled="inputSwitch"></el-input>
         </el-form-item>
 
         <el-form-item label="资产类型">
-          <el-select v-model="currentProperty.debt_type" placeholder="请选择资产类型">
+          <el-select v-model="currentProperty.debt_type" placeholder="请选择资产类型" :disabled="inputSwitch">
             <el-option
               v-for="item in selectData.debType"
               :key="item.debTypeId"
@@ -74,46 +82,46 @@
           </el-select>
         </el-form-item>
         <el-form-item label="资产说明">
-          <el-input type="textarea" v-model="currentStr.propertyInstr"></el-input>
+          <el-input type="textarea" v-model="currentStr.propertyInstr" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="配套信息">
-          <el-input type="textarea" v-model="currentStr.propertyParms"></el-input>
+          <el-input type="textarea" v-model="currentStr.propertyParms" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="债权机构">
-          <el-input v-model="currentProperty.bond_institution"></el-input>
+          <el-input v-model="currentProperty.bond_institution" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="债务人">
-          <el-input v-model="currentProperty.obligor"></el-input>
+          <el-input v-model="currentProperty.obligor" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="保证人">
-          <el-input v-model="currentProperty.guarantee"></el-input>
+          <el-input v-model="currentProperty.guarantee" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="抵押人">
-          <el-input v-model="currentProperty.mortgagor"></el-input>
+          <el-input v-model="currentProperty.mortgagor" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="资产亮点">
-          <el-input  type="textarea" v-model="currentStr.propertySpot"></el-input>
+          <el-input  type="textarea" v-model="currentStr.propertySpot" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="联系人">
-          <el-input v-model="currentProperty.contacts"></el-input>
+          <el-input v-model="currentProperty.contacts" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="联系人电话">
-          <el-input v-model="currentProperty.c_phone"></el-input>
+          <el-input v-model="currentProperty.c_phone" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="传真">
-          <el-input v-model="currentProperty.fax"></el-input>
+          <el-input v-model="currentProperty.fax" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="通讯地址">
-          <el-input v-model="currentProperty.p_address"></el-input>
+          <el-input v-model="currentProperty.p_address" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="交易对象">
-          <el-input v-model="currentProperty.transaction"></el-input>
+          <el-input v-model="currentProperty.transaction" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="声明">
-          <el-input v-model="currentProperty.statement"></el-input>
+          <el-input v-model="currentProperty.statement" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="资产种类">
-          <el-select v-model="currentProperty.category_name" placeholder="请选择资产类型">
+          <el-select v-model="currentProperty.category_name" placeholder="请选择资产类型" :disabled="inputSwitch">
             <el-option
               v-for="item in selectData.categorys"
               :key="item.id"
@@ -125,19 +133,19 @@
 
         <el-form-item label="详情图片">
           <div v-for="(imgInput, index) in imgBuildParm.middle">
-            <input type="file" @change="tirggerFile(index, 'middle', $event)" />
+            <input type="file" @change="tirggerFile(index, 'middle', $event)" v-show="modalButton"/>
             <i class="el-icon-circle-close
-" style="color: #F56C6C" @click="autoDelImg('middle', index)"></i>
+" style="color: #F56C6C" @click="autoDelImg('middle', index)" v-show="modalButton"></i>
             <div>
               <img style="height: 150px" :src="imgInput.src" alt="" v-show="imgInput.show">
             </div>
           </div>
-          <button type="submit" @click="autoAddImg('middle')">添加</button>
+          <button type="submit" @click="autoAddImg('middle')" v-show="modalButton">添加</button>
         </el-form-item>
 
         <el-form-item label="封面图片">
           <div v-for="(imgInput, index) in imgBuildParm.small">
-            <input type="file" @change="tirggerFile(index, 'small', $event)" />
+            <input type="file" @change="tirggerFile(index, 'small', $event)" v-show="modalButton"/>
             <div>
               <img style="height: 100px" :src="imgInput.src" alt="" v-show="imgInput.show">
             </div>
@@ -158,7 +166,8 @@
     data() {
       return {
         activeUser: this.$store.state.user,
-        modalButton: true,
+        modalButton: false,
+        inputSwitch: true,
         imgBuildParm: {},
         selectData: {
           debType: [{
@@ -182,6 +191,15 @@
     created() {
       this.getProperties()
       this.initImgBuilder()
+    },
+    watch: {
+      inputSwitch: function() {
+        if (this.inputSwitch === true) {
+          this.modalButton = false
+        } else {
+          this.modalButton = true
+        }
+      }
     },
     methods: {
       initImgBuilder() {
@@ -207,7 +225,6 @@
             imgBuilder[imgsize][index].show = true
           }
         }
-        // console.log(this.currentProperty)
       },
       autoAddImg(imgSize) {
         let newImgObj = {'src': null, 'id': null, 'show': false}
@@ -264,10 +281,10 @@
           this.propertyAdd = false
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])
-          // console.log()
           this.imgBuildParm = this.currentProperty.assets_imgs
-          console.log(this.imgBuildParm)
           this.dictToStr()
+          this.modalButton = false
+          this.inputSwitch = true
         }
         this.propertyModal = true
       },
@@ -362,10 +379,7 @@
         if (isNaN(this.currentProperty.category_id) == true) {
           this.setProCate(this.currentProperty.category_id, 'name')
         }
-        // console.log(this.activeUser)
-        // console.log(11111111)
         this.currentProperty.author_id = parseInt(this.activeUser.user_id)
-        console.log(this.currentProperty)
         this.axios({
           method: method,
           data: this.currentProperty,
