@@ -498,6 +498,7 @@
         }).then(() => {
           let updatedUser = Object.assign({}, this.users[index])
           updatedUser.active = is_active
+          delete updatedUser['role_level']
           this.axios.put(actionAPI, updatedUser).then(res => {
             if(res.status == 200) {
               this.users.splice(index, 1, res.data)
