@@ -40,7 +40,7 @@ class Assets(models.Model):
     # 说明
     instruction = JSONField(verbose_name=u'资产说明')
     # 配套信息
-    parms = JSONField(verbose_name=u'配套信息')
+    parms = JSONField(verbose_name=u'配套信息', blank=True)
     # 机构
     bond_institution = models.CharField(max_length=32, verbose_name=u'债权机构')
     obligor = models.CharField(max_length=8, verbose_name=u'债务人')

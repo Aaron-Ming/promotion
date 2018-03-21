@@ -16919,17 +16919,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _keys = __webpack_require__(191);
-
-var _keys2 = _interopRequireDefault(_keys);
-
-var _getIterator2 = __webpack_require__(81);
-
-var _getIterator3 = _interopRequireDefault(_getIterator2);
-
 var _assign = __webpack_require__(24);
 
 var _assign2 = _interopRequireDefault(_assign);
+
+var _keys = __webpack_require__(191);
+
+var _keys2 = _interopRequireDefault(_keys);
 
 var _chinese = __webpack_require__(95);
 
@@ -16940,6 +16936,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   data: function data() {
     return {
+      tmpArr: {
+        parmArr: [],
+        spotArr: ['测试亮点1', '测试亮点2'],
+        instrArr: ['测试说明1', '测试说明2']
+      },
+      customParm: {
+        instruction: true,
+        parms: true,
+        spot: true
+      },
       activeUser: this.$store.state.user,
       modalButton: false,
       inputSwitch: true,
@@ -16960,9 +16966,7 @@ exports.default = {
       propertyAdd: false,
       currentProperty: {},
       currentIndex: null,
-      propertyUrl: '/assets/properties/',
-      instruction: {},
-      testobject: { name: 'zhangsan' }
+      propertyUrl: '/assets/properties/'
     };
   },
   created: function created() {
@@ -16979,7 +16983,7 @@ exports.default = {
       }
     },
     currentProperty: function currentProperty() {
-      console.log(this.currentProperty);
+      console.log(this.currentProperty, 'watch');
     }
   },
   methods: {
@@ -16992,6 +16996,41 @@ exports.default = {
         }]
       };
       this.imgBuildParm = imgInit;
+    },
+    initCustomParm: function initCustomParm(action) {
+      if (action == 'add') {
+        console.log(this.currentProperty);
+        this.currentProperty.parms = {};
+        this.currentProperty.spot = {};
+        this.currentProperty.instruction = {};
+        var parmsObj = this.currentProperty.parms;
+        var spotObj = this.currentProperty.spot;
+        var instrObj = this.currentProperty.instruction;
+        this.tmpArr.parmArr.forEach(function (ele) {
+          console.log(ele);
+          parmsObj[ele] = null;
+        });
+        this.tmpArr.spotArr.forEach(function (ele) {
+          spotObj[ele] = null;
+        });
+        this.tmpArr.instrArr.forEach(function (ele) {
+          instrObj[ele] = null;
+        });
+        console.log(this.currentProperty);
+      }
+      var instrArr = (0, _keys2.default)(this.currentProperty.instruction);
+      var parmsArr = (0, _keys2.default)(this.currentProperty.parms);
+      var spotArr = (0, _keys2.default)(this.currentProperty.spot);
+
+      if (instrArr.length == 0) {
+        this.customParm.instruction = false;
+      }
+      if (spotArr.length == 0) {
+        this.customParm.spot = false;
+      }
+      if (parmsArr.length == 0) {
+        this.customParm.parms = false;
+      }
     },
 
     tirggerFile: function tirggerFile(index, imgsize, event) {
@@ -17057,129 +17096,25 @@ exports.default = {
         this.propertyAdd = true;
         if (this.currentProperty.id) {
           this.currentProperty = {};
-          this.currentStr = {};
           this.initImgBuilder();
         }
         this.currentProperty.assets_imgs = this.imgBuildParm;
         this.modalButton = true;
         this.inputSwitch = false;
+        this.initCustomParm('add');
       } else if (index >= 0) {
         this.propertyAdd = false;
         this.currentIndex = index;
         this.currentProperty = (0, _assign2.default)({}, this.properties[index]);
         this.imgBuildParm = this.currentProperty.assets_imgs;
-        this.dictToStr();
         this.modalButton = false;
         this.inputSwitch = true;
-        this.instruction = this.currentProperty.instruction;
+        this.initCustomParm('show');
       }
       this.propertyModal = true;
     },
     detailUrl: function detailUrl() {
       return this.propertyUrl + this.currentProperty.id + '/';
-    },
-    formatDict: function formatDict(obj) {
-      var reStr = '';
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = (0, _getIterator3.default)((0, _keys2.default)(obj)), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
-
-          reStr += key + '：' + obj[key] + '\n';
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return reStr;
-    },
-    formatStr: function formatStr(str) {
-      if (str === undefined) {
-        this.$notify.error({
-          title: '出错了',
-          duration: 0,
-          message: '资产资产说明、配套信息、资产亮点不能为空'
-        });
-      }
-      var keyVal = null;
-      var reDict = {};
-      var strArr = str.split('\n');
-      if (strArr[strArr.length - 1] === '') {
-        strArr.pop();
-      }
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = (0, _getIterator3.default)(strArr), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var v = _step2.value;
-
-          if (v.includes('：') == true) {
-            keyVal = v.split('：');
-          } else if (v.includes(':') == true) {
-            keyVal = v.split(':');
-          } else {
-            this.$notify.error({
-              title: '出错了',
-              duration: 0,
-              message: '请检查资产资产说明、配套信息、资产亮点输入格式'
-            });
-            return;
-          }
-          if (keyVal != null) {
-            var realDictVal = keyVal[1];
-            var tmpDictVal = parseFloat(keyVal[1]);
-            if (isNaN(tmpDictVal) === false) {
-              reDict[keyVal[0]] = tmpDictVal;
-            } else {
-              reDict[keyVal[0]] = realDictVal;
-            }
-          }
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2.return) {
-            _iterator2.return();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      return reDict;
-    },
-    dictToStr: function dictToStr() {
-      var propertyInstr = this.currentProperty.instruction;
-      var propertyParms = this.currentProperty.parms;
-      var propertySpot = this.currentProperty.spot;
-      this.currentStr.propertyInstr = this.formatDict(propertyInstr);
-      this.currentStr.propertyParms = this.formatDict(propertyParms);
-      this.currentStr.propertySpot = this.formatDict(propertySpot);
-    },
-    strToDict: function strToDict() {
-      this.currentProperty.instruction = this.formatStr(this.currentStr.propertyInstr);
-      this.currentProperty.parms = this.formatStr(this.currentStr.propertyParms);
-      this.currentProperty.spot = this.formatStr(this.currentStr.propertySpot);
     },
     setProCate: function setProCate(category, setType) {
       var newProCate = null;
@@ -17199,10 +17134,8 @@ exports.default = {
       var _this3 = this;
 
       console.log(this.currentProperty, '123123');
-      console.log(this.instruction);
       var submitUrl = this.propertyUrl;
       var method = 'post';
-      this.strToDict();
       if (!this.propertyAdd) {
         submitUrl = this.detailUrl();
         method = 'put';
@@ -25976,41 +25909,44 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _c("h2", [_vm._v("资产说明")]),
+              _c(
+                "h2",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.customParm.instruction,
+                      expression: "customParm.instruction"
+                    }
+                  ]
+                },
+                [_vm._v("资产说明")]
+              ),
               _vm._v(" "),
-              _vm._l(_vm.instruction, function(v, k) {
+              _vm._l(_vm.currentProperty.instruction, function(v, k) {
                 return _c(
                   "el-form-item",
-                  { attrs: { label: k } },
-                  [
-                    _c("el-input", {
-                      attrs: { disabled: _vm.inputSwitch },
-                      model: {
-                        value: _vm.instruction[k],
-                        callback: function($$v) {
-                          _vm.$set(_vm.instruction, k, $$v)
-                        },
-                        expression: "instruction[k]"
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.customParm.instruction,
+                        expression: "customParm.instruction"
                       }
-                    })
-                  ],
-                  1
-                )
-              }),
-              _vm._v(" "),
-              _vm._l(_vm.testobject, function(v, k) {
-                return _c(
-                  "el-form-item",
-                  { attrs: { label: k } },
+                    ],
+                    attrs: { label: k }
+                  },
                   [
                     _c("el-input", {
                       attrs: { disabled: _vm.inputSwitch },
                       model: {
-                        value: _vm.testobject[k],
+                        value: _vm.currentProperty.instruction[k],
                         callback: function($$v) {
-                          _vm.$set(_vm.testobject, k, $$v)
+                          _vm.$set(_vm.currentProperty.instruction, k, $$v)
                         },
-                        expression: "testobject[k]"
+                        expression: "currentProperty.instruction[k]"
                       }
                     })
                   ],
@@ -26019,22 +25955,96 @@ var render = function() {
               }),
               _vm._v(" "),
               _c(
-                "el-form-item",
-                { attrs: { label: "配套信息" } },
-                [
-                  _c("el-input", {
-                    attrs: { type: "textarea", disabled: _vm.inputSwitch },
-                    model: {
-                      value: _vm.currentStr.propertyParms,
-                      callback: function($$v) {
-                        _vm.$set(_vm.currentStr, "propertyParms", $$v)
-                      },
-                      expression: "currentStr.propertyParms"
+                "h2",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.customParm.parms,
+                      expression: "customParm.parms"
                     }
-                  })
-                ],
-                1
+                  ]
+                },
+                [_vm._v("配套信息")]
               ),
+              _vm._v(" "),
+              _vm._l(_vm.currentProperty.parms, function(v, k) {
+                return _c(
+                  "el-form-item",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.customParm.parms,
+                        expression: "customParm.parms"
+                      }
+                    ],
+                    attrs: { label: k }
+                  },
+                  [
+                    _c("el-input", {
+                      attrs: { disabled: _vm.inputSwitch },
+                      model: {
+                        value: _vm.currentProperty.parms[k],
+                        callback: function($$v) {
+                          _vm.$set(_vm.currentProperty.parms, k, $$v)
+                        },
+                        expression: "currentProperty.parms[k]"
+                      }
+                    })
+                  ],
+                  1
+                )
+              }),
+              _vm._v(" "),
+              _c(
+                "h2",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.customParm.spot,
+                      expression: "customParm.spot"
+                    }
+                  ]
+                },
+                [_vm._v("资产亮点")]
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.currentProperty.spot, function(v, k) {
+                return _c(
+                  "el-form-item",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.customParm.spot,
+                        expression: "customParm.spot"
+                      }
+                    ],
+                    attrs: { label: k }
+                  },
+                  [
+                    _c("el-input", {
+                      attrs: { disabled: _vm.inputSwitch },
+                      model: {
+                        value: _vm.currentProperty.spot[k],
+                        callback: function($$v) {
+                          _vm.$set(_vm.currentProperty.spot, k, $$v)
+                        },
+                        expression: "currentProperty.spot[k]"
+                      }
+                    })
+                  ],
+                  1
+                )
+              }),
+              _vm._v(" "),
+              _c("h2", [_vm._v("其他参数")]),
               _vm._v(" "),
               _c(
                 "el-form-item",
@@ -26102,24 +26112,6 @@ var render = function() {
                         _vm.$set(_vm.currentProperty, "mortgagor", $$v)
                       },
                       expression: "currentProperty.mortgagor"
-                    }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-form-item",
-                { attrs: { label: "资产亮点" } },
-                [
-                  _c("el-input", {
-                    attrs: { type: "textarea", disabled: _vm.inputSwitch },
-                    model: {
-                      value: _vm.currentStr.propertySpot,
-                      callback: function($$v) {
-                        _vm.$set(_vm.currentStr, "propertySpot", $$v)
-                      },
-                      expression: "currentStr.propertySpot"
                     }
                   })
                 ],
@@ -26263,6 +26255,8 @@ var render = function() {
                 ],
                 1
               ),
+              _vm._v(" "),
+              _c("h2", [_vm._v("资产图片")]),
               _vm._v(" "),
               _c(
                 "el-form-item",
