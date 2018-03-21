@@ -82,8 +82,15 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资产说明">
+        <!-- <el-form-item label="资产说明">
           <el-input type="textarea" v-model="currentStr.propertyInstr" :disabled="inputSwitch"></el-input>
+        </el-form-item> -->
+        <h2>资产说明</h2>
+        <el-form-item v-for="(v, k) in instruction" :label="k">
+          <el-input :disabled="inputSwitch" v-model="instruction[k]"></el-input>
+        </el-form-item>
+        <el-form-item v-for="(v, k) in testobject" :label="k">
+          <el-input :disabled="inputSwitch" v-model="testobject[k]"></el-input>
         </el-form-item>
         <el-form-item label="配套信息">
           <el-input type="textarea" v-model="currentStr.propertyParms" :disabled="inputSwitch"></el-input>
@@ -186,7 +193,9 @@
         propertyAdd: false,
         currentProperty: {},
         currentIndex: null,
-        propertyUrl: '/assets/properties/'
+        propertyUrl: '/assets/properties/',
+        instruction: {},
+        testobject: {name: 'zhangsan'}
       }
     },
     created() {
@@ -200,6 +209,9 @@
         } else {
           this.modalButton = true
         }
+      },
+      currentProperty: function() {
+        console.log(this.currentProperty)
       }
     },
     methods: {
@@ -278,6 +290,8 @@
             this.initImgBuilder()
           }
           this.currentProperty.assets_imgs = this.imgBuildParm
+          this.modalButton = true
+          this.inputSwitch = false
         } else if(index>=0) {
           this.propertyAdd = false
           this.currentIndex = index
@@ -286,6 +300,7 @@
           this.dictToStr()
           this.modalButton = false
           this.inputSwitch = true
+          this.instruction = this.currentProperty.instruction
         }
         this.propertyModal = true
       },
@@ -366,6 +381,8 @@
         }
       },
       submitProperty() {
+        console.log(this.currentProperty,'123123')
+        console.log(this.instruction)
         let submitUrl =  this.propertyUrl
         let method = 'post'
         this.strToDict()

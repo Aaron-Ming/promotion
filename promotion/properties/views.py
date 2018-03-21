@@ -16,6 +16,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.order_by('id')
     serializer_class = CategorySerializer
 
+    def destroy(self, request, *args, **kwargs):
+        category_id = kwargs.get('pk')
+        cateAssets = Assets.objects.filter(category_id=category_id)
+        if len(cateAssets) != 0:
+            return Response(status=410)
+        return super(CategoryViewSet, self).destroy(request, *args, **kwargs)
+
 
 class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Assets.objects.all()
