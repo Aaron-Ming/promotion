@@ -56,9 +56,10 @@
     <el-dialog
       :title="propertyAdd ? '添加资产' : '查看 | 编辑资产信息'"
       :visible.sync="propertyModal"
+      custom-class="asset-modal"
     >
       <el-switch
-        style="display: block"
+        style="margin-bottom: 20px; text-align: right;"
         v-model="inputSwitch"
         active-color="#13ce66"
         inactive-color="#ff4949"
@@ -447,3 +448,9 @@
     },
   }
 </script>
+
+<style>
+  .asset-modal > .el-dialog__body {
+    padding: 20px 20px !important;
+  }
+</style>
