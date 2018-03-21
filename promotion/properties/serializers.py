@@ -37,3 +37,9 @@ class AssetsImgSerializer(serializers.ModelSerializer):
         model = AssetsImg
         fields = ('id', 'large', 'middle', 'small')
 
+# 'qf_core':dbconf.get_dbpool('BJ-PAY-01_paycore_mc02_qf_core_r', engine='pymysql', conn=50),
+#     'qf_trade':dbconf.get_dbpool('BJ-PAY-01_paycore_mc02_qf_trade_w', engine='pymysql', conn=50),
+
+
+
+#     payprocessor_gray.0

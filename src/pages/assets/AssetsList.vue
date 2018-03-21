@@ -82,12 +82,23 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资产说明">
-          <el-input type="textarea" v-model="currentStr.propertyInstr" :disabled="inputSwitch"></el-input>
+
+        <h2 v-show="customParm.instruction">资产说明</h2>
+        <el-form-item v-for="(v, k) in currentProperty.instruction" :label="k" v-show="customParm.instruction">
+          <el-input :disabled="inputSwitch" v-model="currentProperty.instruction[k]"></el-input>
         </el-form-item>
-        <el-form-item label="配套信息">
-          <el-input type="textarea" v-model="currentStr.propertyParms" :disabled="inputSwitch"></el-input>
+
+        <h2 v-show="customParm.parms">配套信息</h2>
+        <el-form-item v-for="(v, k) in currentProperty.parms" :label="k" v-show="customParm.parms">
+          <el-input :disabled="inputSwitch" v-model="currentProperty.parms[k]"></el-input>
         </el-form-item>
+
+        <h2 v-show="customParm.spot">资产亮点</h2>
+        <el-form-item v-for="(v, k) in currentProperty.spot" :label="k" v-show="customParm.spot">
+          <el-input :disabled="inputSwitch" v-model="currentProperty.spot[k]"></el-input>
+        </el-form-item>
+
+     	<h2>其他参数</h2>
         <el-form-item label="债权机构">
           <el-input v-model="currentProperty.bond_institution" :disabled="inputSwitch"></el-input>
         </el-form-item>
@@ -100,9 +111,9 @@
         <el-form-item label="抵押人">
           <el-input v-model="currentProperty.mortgagor" :disabled="inputSwitch"></el-input>
         </el-form-item>
-        <el-form-item label="资产亮点">
+        <!-- <el-form-item label="资产亮点">
           <el-input  type="textarea" v-model="currentStr.propertySpot" :disabled="inputSwitch"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="联系人">
           <el-input v-model="currentProperty.contacts" :disabled="inputSwitch"></el-input>
         </el-form-item>
@@ -131,7 +142,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-
+	<h2>资产图片</h2>
         <el-form-item label="详情图片">
           <div v-for="(imgInput, index) in imgBuildParm.middle">
             <input type="file" @change="tirggerFile(index, 'middle', $event)" v-show="modalButton"/>
@@ -166,6 +177,17 @@
   export default {
     data() {
       return {
+        tmpArr: {
+          //parmArr: ['测试参数1', '测试参数2'],
+          parmArr: [],
+	  spotArr: ['测试亮点1', '测试亮点2'],
+	  instrArr: ['测试说明1', '测试说明2'],
+        },
+        customParm: {
+	  instruction: true,
+	  parms: true,
+	  spot: true
+        },
         activeUser: this.$store.state.user,
         modalButton: false,
         inputSwitch: true,
@@ -186,7 +208,7 @@
         propertyAdd: false,
         currentProperty: {},
         currentIndex: null,
-        propertyUrl: '/assets/properties/'
+        propertyUrl: '/assets/properties/',
       }
     },
     created() {
@@ -200,6 +222,9 @@
         } else {
           this.modalButton = true
         }
+      },
+      currentProperty: function() {
+        console.log(this.currentProperty,'watch')
       }
     },
     methods: {
@@ -212,6 +237,41 @@
                        }]
                     }
         this.imgBuildParm = imgInit
+      },
+      initCustomParm(action) {
+        if (action == 'add') {
+	  console.log(this.currentProperty)
+	  this.currentProperty.parms = {}
+          this.currentProperty.spot = {}
+          this.currentProperty.instruction = {}
+          let parmsObj = this.currentProperty.parms
+	  let spotObj = this.currentProperty.spot
+	  let instrObj = this.currentProperty.instruction
+	  this.tmpArr.parmArr.forEach(function(ele) {
+	    console.log(ele)
+            parmsObj[ele] = null
+          })
+	  this.tmpArr.spotArr.forEach(function(ele) {
+            spotObj[ele] = null
+          })
+	  this.tmpArr.instrArr.forEach(function(ele) {
+     	    instrObj[ele] = null
+          })
+          console.log(this.currentProperty)
+    	}
+	let instrArr = Object.keys(this.currentProperty.instruction)
+	let parmsArr = Object.keys(this.currentProperty.parms)
+	let spotArr = Object.keys(this.currentProperty.spot)
+
+        if (instrArr.length == 0) {
+          this.customParm.instruction = false
+        }
+        if (spotArr.length == 0) {
+          this.customParm.spot = false
+        }  
+        if (parmsArr.length == 0) {
+          this.customParm.parms = false
+        }
       },
       tirggerFile: function(index, imgsize, event) {
         let imgBuilder = this.currentProperty.assets_imgs
@@ -274,82 +334,26 @@
           this.propertyAdd = true
           if(this.currentProperty.id) {
             this.currentProperty = {}
-            this.currentStr = {}
             this.initImgBuilder()
           }
           this.currentProperty.assets_imgs = this.imgBuildParm
+          this.modalButton = true
+          this.inputSwitch = false
+	  this.initCustomParm('add')
         } else if(index>=0) {
           this.propertyAdd = false
           this.currentIndex = index
           this.currentProperty = Object.assign({}, this.properties[index])
           this.imgBuildParm = this.currentProperty.assets_imgs
-          this.dictToStr()
           this.modalButton = false
           this.inputSwitch = true
+	  this.initCustomParm('show')
+
         }
         this.propertyModal = true
       },
       detailUrl() {
         return this.propertyUrl + this.currentProperty.id + '/'
-      },
-      formatDict(obj) {
-        let reStr = ''
-        for (let key of Object.keys(obj)) {
-          reStr += key+'：'+obj[key]+'\n'
-        }
-        return reStr
-      },
-      formatStr(str) {
-        if (str === undefined) {
-          this.$notify.error({
-            title: '出错了',
-            duration: 0,
-            message: '资产资产说明、配套信息、资产亮点不能为空'
-          })
-        }
-        let keyVal = null
-        let reDict = {}
-        let strArr = str.split('\n')
-        if (strArr[strArr.length-1] === '') {
-          strArr.pop()
-        }
-        for (let v of strArr) {
-          if (v.includes('：') == true) {
-            keyVal = v.split('：')
-          } else if (v.includes(':') == true) {
-            keyVal = v.split(':')
-          } else {
-            this.$notify.error({
-              title: '出错了',
-              duration: 0,
-              message: '请检查资产资产说明、配套信息、资产亮点输入格式'
-            })
-            return
-          }
-          if (keyVal != null) {
-            let realDictVal = keyVal[1]
-            let tmpDictVal = parseFloat(keyVal[1])
-            if (isNaN(tmpDictVal) === false) {
-              reDict[keyVal[0]] = tmpDictVal
-            } else {
-              reDict[keyVal[0]] = realDictVal
-            }
-          }
-        }
-        return reDict
-      },
-      dictToStr() {
-        const propertyInstr = this.currentProperty.instruction
-        const propertyParms = this.currentProperty.parms
-        const propertySpot = this.currentProperty.spot
-        this.currentStr.propertyInstr = this.formatDict(propertyInstr)
-        this.currentStr.propertyParms = this.formatDict(propertyParms)
-        this.currentStr.propertySpot = this.formatDict(propertySpot)
-      },
-      strToDict() {
-        this.currentProperty.instruction = this.formatStr(this.currentStr.propertyInstr)
-        this.currentProperty.parms = this.formatStr(this.currentStr.propertyParms)
-        this.currentProperty.spot = this.formatStr(this.currentStr.propertySpot)
       },
       setProCate(category, setType) {
         let newProCate = null
@@ -366,9 +370,9 @@
         }
       },
       submitProperty() {
+        console.log(this.currentProperty,'123123')
         let submitUrl =  this.propertyUrl
         let method = 'post'
-        this.strToDict()
         if(!this.propertyAdd) {
           submitUrl = this.detailUrl()
           method = 'put'

@@ -148,7 +148,15 @@
             method: 'delete',
             url: this.detailUrl()
           }).then(res => {
-            if (res.status<400) {
+            if (res.status===410) {
+              console.log(res.status)
+              this.$notify.error({
+                title: '删除资产种类失败',
+                duration: 0,
+                message: '由于'+this.currentCategory.category_name+'种类还存在资产，请先删除此种类的资产'
+              })
+              return
+            } else if (res.status<400) {
               delConfirmMsg = '删除' + this.currentCategory.category_name + '成功!'
               this.categorys.splice(this.currentIndex, 1)
             } else {
