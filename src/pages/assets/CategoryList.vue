@@ -41,6 +41,40 @@
         <el-form-item label="类型名称">
           <el-input v-model="currentCategory.category_name"></el-input>
         </el-form-item>
+
+        <div>
+          <b>资产说明模板参数&nbsp;&nbsp;&nbsp;</b>
+          <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('instruction')">添加</el-button>
+        </div>
+        <div>
+          <el-form-item v-for="(item, index) in currentCategory.instruction" label="">
+            <el-input style="width:50%;" size="mini" v-model="currentCategory.instruction[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('instruction', index)"></i>
+          </el-form-item>
+        </div>
+
+        <div>
+          <b>资产配套模板参数&nbsp;&nbsp;&nbsp;</b>
+          <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('parms')">添加</el-button>
+        </div>
+        <div>
+          <el-form-item v-for="(item, index) in currentCategory.parms" label="">
+            <el-input style="width:50%;" size="mini" v-model="currentCategory.parms[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('parms', index)"></i>
+          </el-form-item>
+        </div>
+
+        <div>
+          <b>资产亮点模板参数&nbsp;&nbsp;&nbsp;</b>
+          <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('spot')">添加</el-button>
+        </div>
+        <div>
+          <el-form-item v-for="(item, index) in currentCategory.spot" label="">
+            <el-input style="width:50%;" size="mini" v-model="currentCategory.spot[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('spot', index)"></i>
+          </el-form-item>
+        </div>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="categoryModal = false">取 消</el-button>
@@ -68,6 +102,17 @@
       this.getCategorys()
     },
     methods: {
+      addParmButton(t) {
+        this.currentCategory[t].push(null)
+      },
+      delParmButton(t, index) {
+        this.currentCategory[t].splice(index, 1)
+      },
+      initParmArr() {
+        this.currentCategory.instruction = []
+        this.currentCategory.spot = []
+        this.currentCategory.parms = []
+      },
       getCategorys() {
         this.axios.get('/assets/categorys/')
         .then(res => {
@@ -87,6 +132,7 @@
       showModal(action, index) {
         if(action == 'add') {
           this.categoryAdd = true
+          this.initParmArr()
           if(this.currentCategory.id) {
             this.currentCategory = {}
           }
