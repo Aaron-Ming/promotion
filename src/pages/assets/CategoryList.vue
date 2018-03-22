@@ -41,6 +41,41 @@
         <el-form-item label="类型名称">
           <el-input v-model="currentCategory.category_name"></el-input>
         </el-form-item>
+
+        <b>资产说明模板参数&nbsp;&nbsp;&nbsp;</b>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('instruction')">添加</el-button>
+        <el-form-item label="">
+          <div v-for="(item, index) in instrArr">
+            <el-input style="width:50%;" size="mini" v-model="instrArr[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('instruction', index)"></i>
+          </div>
+        </el-form-item>
+
+        <b>资产配套模板参数&nbsp;&nbsp;&nbsp;</b>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('parms')">添加</el-button>
+        <el-form-item label="">
+          <div v-for="(item, index) in parmsArr">
+            <el-input style="width:50%;" size="mini" v-model="parmsArr[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('parms', index)"></i>
+          </div>
+        </el-form-item>
+
+        <b>资产亮点模板参数&nbsp;&nbsp;&nbsp;</b>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="addParmButton('spot')">添加</el-button>
+        <el-form-item label="">
+          <div v-for="(item, index) in spotArr">
+            <el-input style="width:50%;" size="mini" v-model="spotArr[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('spot', index)"></i>
+          </div>
+        </el-form-item>
+
+        <!--<div>
+          <el-form-item v-for="(item, index) in currentCategory.spot" label="" :key="index">
+            <el-input style="width:50%;" size="mini" v-model="currentCategory.spot[index]"></el-input>
+            <i class="el-icon-delete" style="color: #F56C6C" @click="delParmButton('spot', index)"></i>
+          </el-form-item>
+        </div>-->
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="categoryModal = false">取 消</el-button>
@@ -61,13 +96,33 @@
         currentCategory: {},
         currentIndex: null,
         categoryDel: false,
-        categoryUrl: '/assets/categorys/'
+        categoryUrl: '/assets/categorys/',
+        instrArr: [],
+        parmsArr: [],
+        spotArr: []
       }
     },
     created() {
       this.getCategorys()
     },
+
     methods: {
+      mapParms() {
+        this.instrArr = this.currentCategory.instruction
+        this.parmsArr = this.currentCategory.parms
+        this.spotArr = this.currentCategory.spot
+      },
+      addParmButton(t) {
+        this.currentCategory[t].push(null)
+      },
+      delParmButton(t, index) {
+        this.currentCategory[t].splice(index, 1)
+      },
+      initParmArr() {
+        this.currentCategory.instruction = [null]
+        this.currentCategory.spot = [null]
+        this.currentCategory.parms = [null]
+      },
       getCategorys() {
         this.axios.get('/assets/categorys/')
         .then(res => {
@@ -90,17 +145,22 @@
           if(this.currentCategory.id) {
             this.currentCategory = {}
           }
+          //this.currentCategory.category_name = null
+          this.initParmArr()
         } else if(index>=0) {
           this.currentIndex = index
           this.currentCategory = Object.assign({}, this.categorys[index])
+          this.categoryAdd = false
         }
         this.categoryModal = true
+        this.mapParms()
+        console.log(this.currentCategory)
       },
       detailUrl() {
         return this.categoryUrl + this.currentCategory.id + '/'
       },
       submitCategory() {
-        let submitUrl =  '/assets/categorys/'
+        let submitUrl = this.categoryUrl
         let method = 'post'
         if(!this.categoryAdd) {
           submitUrl = this.detailUrl()
@@ -149,7 +209,6 @@
             url: this.detailUrl()
           }).then(res => {
             if (res.status===410) {
-              console.log(res.status)
               this.$notify.error({
                 title: '删除资产种类失败',
                 duration: 0,

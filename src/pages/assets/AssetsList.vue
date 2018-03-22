@@ -72,13 +72,24 @@
           <el-input v-model="currentProperty.title" :disabled="inputSwitch"></el-input>
         </el-form-item>
 
-        <el-form-item label="资产类型">
+        <el-form-item label="资产性质">
           <el-select v-model="currentProperty.debt_type" placeholder="请选择资产类型" :disabled="inputSwitch">
             <el-option
               v-for="item in selectData.debType"
               :key="item.debTypeId"
               :label="item.debTypeName"
               :value="item.debTypeName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="资产种类">
+          <el-select v-model="currentProperty.category_name" placeholder="请选择资产种类" :disabled="inputSwitch">
+            <el-option
+              v-for="item in selectData.categorys"
+              :key="item.id"
+              :label="item.category_name"
+              :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -98,7 +109,7 @@
           <el-input :disabled="inputSwitch" v-model="currentProperty.spot[k]"></el-input>
         </el-form-item>
 
-     	<h2>其他参数</h2>
+        <h2>其他参数</h2>
         <el-form-item label="债权机构">
           <el-input v-model="currentProperty.bond_institution" :disabled="inputSwitch"></el-input>
         </el-form-item>
@@ -111,13 +122,10 @@
         <el-form-item label="抵押人">
           <el-input v-model="currentProperty.mortgagor" :disabled="inputSwitch"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="资产亮点">
-          <el-input  type="textarea" v-model="currentStr.propertySpot" :disabled="inputSwitch"></el-input>
-        </el-form-item> -->
         <el-form-item label="联系人">
           <el-input v-model="currentProperty.contacts" :disabled="inputSwitch"></el-input>
         </el-form-item>
-        <el-form-item label="联系人电话">
+        <el-form-item label="联系电话">
           <el-input v-model="currentProperty.c_phone" :disabled="inputSwitch"></el-input>
         </el-form-item>
         <el-form-item label="传真">
@@ -132,22 +140,12 @@
         <el-form-item label="声明">
           <el-input v-model="currentProperty.statement" :disabled="inputSwitch"></el-input>
         </el-form-item>
-        <el-form-item label="资产种类">
-          <el-select v-model="currentProperty.category_name" placeholder="请选择资产类型" :disabled="inputSwitch">
-            <el-option
-              v-for="item in selectData.categorys"
-              :key="item.id"
-              :label="item.category_name"
-              :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-	<h2>资产图片</h2>
+
+        <h2>资产图片</h2>
         <el-form-item label="详情图片">
           <div v-for="(imgInput, index) in imgBuildParm.middle">
             <input type="file" @change="tirggerFile(index, 'middle', $event)" v-show="modalButton"/>
-            <i class="el-icon-circle-close
-" style="color: #F56C6C" @click="autoDelImg('middle', index)" v-show="modalButton"></i>
+            <i class="el-icon-circle-close" style="color: #F56C6C" @click="autoDelImg('middle', index)" v-show="modalButton"></i>
             <div>
               <img style="height: 150px" :src="imgInput.src" alt="" v-show="imgInput.show">
             </div>
@@ -177,16 +175,15 @@
   export default {
     data() {
       return {
-        tmpArr: {
-          //parmArr: ['测试参数1', '测试参数2'],
+        cateParmArr: {
           parmArr: [],
-	  spotArr: ['测试亮点1', '测试亮点2'],
-	  instrArr: ['测试说明1', '测试说明2'],
+          spotArr: [],
+          instrArr: [],
         },
         customParm: {
-	  instruction: true,
-	  parms: true,
-	  spot: true
+          instruction: true,
+          parms: true,
+          spot: true
         },
         activeUser: this.$store.state.user,
         modalButton: false,
@@ -202,7 +199,6 @@
           }],
           categorys: []
         },
-        currentStr: {},
         properties: [],
         propertyModal: false,
         propertyAdd: false,
@@ -214,6 +210,7 @@
     created() {
       this.getProperties()
       this.initImgBuilder()
+      this.getCategorys()
     },
     watch: {
       inputSwitch: function() {
@@ -223,9 +220,25 @@
           this.modalButton = true
         }
       },
-      currentProperty: function() {
-        console.log(this.currentProperty,'watch')
-      }
+      'currentProperty.category_name': function(nowCateId) {
+        if (nowCateId !== undefined) {
+          this.cateParmArr = {}
+          let initType = ''
+          let hitCategory = this.selectData.categorys.filter(el => {
+            if (typeof(nowCateId) === 'string') {
+              initType = 'show'
+              return el.category_name == nowCateId
+            } else if (typeof(nowCateId) === 'number') {
+              initType = 'add'
+              return el.id == nowCateId
+            }
+          })
+          this.cateParmArr.parmArr = hitCategory[0].parms
+          this.cateParmArr.instrArr = hitCategory[0].instruction
+          this.cateParmArr.spotArr = hitCategory[0].spot
+          this.initCustomParm(initType)
+        }
+      },
     },
     methods: {
       initImgBuilder() {
@@ -240,37 +253,48 @@
       },
       initCustomParm(action) {
         if (action == 'add') {
-	  console.log(this.currentProperty)
-	  this.currentProperty.parms = {}
+          this.currentProperty.parms = {}
           this.currentProperty.spot = {}
           this.currentProperty.instruction = {}
           let parmsObj = this.currentProperty.parms
-	  let spotObj = this.currentProperty.spot
-	  let instrObj = this.currentProperty.instruction
-	  this.tmpArr.parmArr.forEach(function(ele) {
-	    console.log(ele)
+          let spotObj = this.currentProperty.spot
+          let instrObj = this.currentProperty.instruction
+          if (this.cateParmArr.parmArr.constructor !== Array) {
+            this.cateParmArr.parmArr = []
+          }
+          if (this.cateParmArr.instrArr.constructor !== Array) {
+            this.cateParmArr.instrArr = []
+          }
+          if (this.cateParmArr.spotArr.constructor !== Array) {
+            this.cateParmArr.spotArr = []
+          }
+          this.cateParmArr.parmArr.forEach(function(ele) {
             parmsObj[ele] = null
           })
-	  this.tmpArr.spotArr.forEach(function(ele) {
-            spotObj[ele] = null
+          this.cateParmArr.spotArr.forEach(function(ele) {
+              spotObj[ele] = null
           })
-	  this.tmpArr.instrArr.forEach(function(ele) {
-     	    instrObj[ele] = null
+          this.cateParmArr.instrArr.forEach(function(ele) {
+            instrObj[ele] = null
           })
-          console.log(this.currentProperty)
-    	}
-	let instrArr = Object.keys(this.currentProperty.instruction)
-	let parmsArr = Object.keys(this.currentProperty.parms)
-	let spotArr = Object.keys(this.currentProperty.spot)
-
+        }
+        let instrArr = Object.keys(this.currentProperty.instruction)
+        let parmsArr = Object.keys(this.currentProperty.parms)
+        let spotArr = Object.keys(this.currentProperty.spot)
         if (instrArr.length == 0) {
           this.customParm.instruction = false
+        } else {
+          this.customParm.instruction = true
         }
         if (spotArr.length == 0) {
           this.customParm.spot = false
-        }  
+        } else {
+          this.customParm.spot = true
+        }
         if (parmsArr.length == 0) {
           this.customParm.parms = false
+        } else {
+          this.customParm.parms = true
         }
       },
       tirggerFile: function(index, imgsize, event) {
@@ -329,7 +353,6 @@
         })
       },
       showModal(action, index) {
-        this.getCategorys()
         if(action == 'add') {
           this.propertyAdd = true
           if(this.currentProperty.id) {
@@ -339,7 +362,8 @@
           this.currentProperty.assets_imgs = this.imgBuildParm
           this.modalButton = true
           this.inputSwitch = false
-	  this.initCustomParm('add')
+          this.initCustomParm('add')
+          console.log(this.currentProperty)
         } else if(index>=0) {
           this.propertyAdd = false
           this.currentIndex = index
@@ -347,10 +371,10 @@
           this.imgBuildParm = this.currentProperty.assets_imgs
           this.modalButton = false
           this.inputSwitch = true
-	  this.initCustomParm('show')
-
+          this.initCustomParm('show')
         }
         this.propertyModal = true
+        
       },
       detailUrl() {
         return this.propertyUrl + this.currentProperty.id + '/'
@@ -361,16 +385,15 @@
           newProCate = this.selectData.categorys.filter(el => {
             return el.id == category
           })
-          this.currentProperty.category_name = newProCate[0].category_name
+          return newProCate[0].category_name
         } else if (setType == 'name') {
           newProCate = this.selectData.categorys.filter(el => {
             return el.category_name == category
           })
-          this.currentProperty.category_id = newProCate[0].id
+          return newProCate[0].id
         }
       },
       submitProperty() {
-        console.log(this.currentProperty,'123123')
         let submitUrl =  this.propertyUrl
         let method = 'post'
         if(!this.propertyAdd) {
@@ -382,7 +405,8 @@
           delete this.currentProperty.category_name
         }
         if (isNaN(this.currentProperty.category_id) == true) {
-          this.setProCate(this.currentProperty.category_id, 'name')
+          let resultCateId = this.setProCate(this.currentProperty.category_id, 'name')
+          this.currentProperty.category_id = resultCateId
         }
         this.currentProperty.author_id = parseInt(this.activeUser.user_id)
         this.axios({
@@ -400,7 +424,8 @@
               message: '操作成功！',
               type: 'success'
             })
-            this.setProCate(this.currentProperty.category_id, 'id')
+            let resultCateName = this.setProCate(this.currentProperty.category_id, 'id')
+            this.currentProperty.category_name = resultCateName
           } else {
             let errorMsg = ''
             this.$notify.error({
