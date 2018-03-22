@@ -1,6 +1,8 @@
-var path = require('path')
+const path = require('path')
 const webpack = require('webpack')
-var ExtractTextPlugin = require('extract-text-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 function resolve(dir) {
   return path.resolve(__dirname, dir)
 }
@@ -11,8 +13,8 @@ var config = {
       main: './src/main'
     },
     output: {
-      path: path.join(__dirname, 'statics/js'),
-      filename: '[name].js'
+      path: resolve('statics'),
+      filename: 'js/[name].[hash:8].js'
     },
     resolve: {
       extensions: ['.js', '.vue', '.json'],
@@ -46,7 +48,8 @@ var config = {
           test: /\.css$/,
           use: ExtractTextPlugin.extract({
               use: 'css-loader',
-              fallback: 'style-loader'
+              fallback: 'style-loader',
+              publicPath: '../'
           })
         },
         {
@@ -58,7 +61,7 @@ var config = {
           loader: 'url-loader',
           options: {
               limit: 10000,
-              name: '../img/[name].[hash:8].[ext]'
+              name: 'img/[name].[hash:8].[ext]'
           }
         },
         {
@@ -66,19 +69,26 @@ var config = {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            name: '../fonts/[name].[hash:8].[ext]'
+            name: 'fonts/[name].[hash:8].[ext]'
           }
         }
       ]
     },
     plugins: [
-      new ExtractTextPlugin("../css/main.css"),
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.jQuery': 'jquery',
-        'window.$': 'jquery',
-      }),
+      new CleanWebpackPlugin(['statics/css/main.*.css']),
+      new CleanWebpackPlugin(['statics/js/main.*.js']),
+      new ExtractTextPlugin("css/main.[hash:8].css"),
+      new HtmlWebpackPlugin({
+        filename: '../templates/dashboard.html',
+        title: '钱方运维平台',
+        inject: false,
+        chunks: ['main'], // 加载哪些js 等 静态文件
+        template: './src/index.html',
+        minify: {
+          removeComments: true,
+          collapseWhitespace: false
+        }
+      })
     ]
 };
 
