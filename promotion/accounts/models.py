@@ -79,7 +79,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = u'用户信息'
-        # order_by = ('-id', )
+        ordering = ('-id', )
 
     def __unicode__(self):
         return self.id_name

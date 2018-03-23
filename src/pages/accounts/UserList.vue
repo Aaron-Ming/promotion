@@ -15,6 +15,16 @@
             @click="checkActiveType()"
           >{{ checkTypeData.btnText }}</el-button>
         </div>
+        <el-row :gutter="20">
+          <el-col :span="6" :offset="18">
+            <el-input
+              size="small"
+              placeholder="手机号／姓名"
+              suffix-icon="el-icon-search"
+              v-model="pageProps.search_q">
+            </el-input>
+          </el-col>
+        </el-row>
         <el-table
           :data="users"
           stripe
@@ -95,6 +105,18 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="bottom-pagination">
+          <el-pagination
+            background
+            layout="total, sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :page-sizes="[50, 100, 200]"
+            :current-page="pageProps.page"
+            :page-size="pageProps.page_size"
+            :total="pageCount">
+          </el-pagination>
+        </div>
       </el-card>
     </el-col>
     <!-- user modal -->
@@ -263,6 +285,12 @@
           btnText: '查看未激活',
           is_active: true
         },
+        pageCount: 0,
+        pageProps: {
+          page_size: 50,
+          page: 1,
+          search_q: '',
+        },
         userRules: {
           mobile: [
             {required: true, message: '请输入手机号', trigger: 'change, blur'},
@@ -296,20 +324,26 @@
           }
         }
       },
+      'pageProps.search_q'(search_q) {
+        setTimeout(() => {
+          this.pageProps.page = 1
+          this.getUsers()
+        }, 1000)
+      },
     },
     created() {
       this.getUsers()
     },
     methods: {
-      getUsers(is_active=true) {
+      getUsers() {
+        const params = Object.assign({active: this.checkTypeData.is_active}, this.pageProps)
         this.axios.get('/accounts/users/', {
-          params: {
-            active: is_active
-          }
+          params: params
         })
         .then(res => {
           if(res.status == 200) {
-            this.users = res.data
+            this.users = res.data.results
+            this.pageCount = res.data.count
           } else {
             this.$notify.error({
               title: '获取用户失败',
@@ -321,15 +355,24 @@
           console.log(error)
         })
       },
+      handleSizeChange(val) {
+        this.pageProps.page_size = val
+        console.log(this.pageProps.page_size)
+        this.getUsers()
+      },
+      handleCurrentChange(val) {
+        this.pageProps.page = val
+        this.getUsers()
+      },
       checkActiveType() {
         if(this.checkTypeData.is_active) {
           this.checkTypeData.is_active = false
           this.checkTypeData.btnText = '查看全部'
-          this.getUsers(false)
+          this.getUsers()
         } else {
           this.checkTypeData.is_active = true
           this.checkTypeData.btnText = '查看未激活'
-          this.getUsers(true)
+          this.getUsers()
         }
       },
       setDefaultRole(roleData) {
@@ -523,48 +566,6 @@
           })
         })
       },
-      // setGroupAdmin(index) {
-      //   //设置组长，实现方式有问题，后期再考虑下怎么做
-      //   this.$confirm('如果该组存在组长则会被此用户取代', '确认设置？', {
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     this.currentUser = Object.assign({}, this.users[index])
-      //     this.currentIndex = index
-      //     const submitApi = this.userAdd ? '/accounts/users/' : '/accounts/users/' + this.currentUser.id + '/'
-      //     this.getRoles()
-      //     const groupAdmins = this.selectData.roles.filter(el => {
-      //       return el.role_level == 2
-      //     })
-      //     const role_id = groupAdmins[0].id
-      //     this.currentUser.role = role_id
-      //     this.axios.put(submitApi, this.currentUser)
-      //     .then(res => {
-      //       if(res.status == 200) {
-      //         this.users.splice(this.currentIndex, 1, user)
-      //         this.$message({
-      //           message: '设置成功',
-      //           type: 'success'
-      //         })
-      //       } else {
-      //         this.$notify.error({
-      //           title: '设置组长失败',
-      //           duration: 0,
-      //           message: '错误代码: '+ res.status +', 请联系管理员'
-      //         })
-      //       }
-      //     }).catch(error => {
-      //       console.log(error)
-      //     })
-      //   }).catch(() => {
-      //     console.log(22222)
-      //     this.$message({
-      //       type: 'info',
-      //       message: '已取消组长设置'
-      //     })
-      //   })
-      // },
       checkMobile(rule, value, callback) {
         if(!value) {
           return callback(new Error('请输入手机号'))
@@ -652,5 +653,9 @@
   .change-pwd-btn {
     padding-bottom: 10px;
     margin-left: 100px;
+  }
+  .bottom-pagination {
+    float: right;
+    padding: 20px 10px 20px 10px;
   }
 </style>
