@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import JsonResponse
 
 # from rest_framework import mixins
@@ -18,6 +19,7 @@ from promotion.accounts.serializers import (GroupSerializer,
                                             ProfileSerializer,
                                             RoleSerializer)
 from promotion.utils.permissions import IsSuperUser
+from promotion.utils.pagination import BasePagination
 
 
 class Login(ObtainAuthToken):
@@ -89,10 +91,15 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAdminUser, )
+    pagination_class = BasePagination
 
     def get_queryset(self):
         user = self.request.user
+        search_q = self.request.GET.get('search_q', '')
         res_users = UserProfile.objects.filter(user__is_superuser=False)
+        if search_q:
+            res_users = res_users.filter(Q(mobile__icontains=search_q) |
+                                         Q(id_name__icontains=search_q))
         if hasattr(user, 'userprofile'):
             group = user.userprofile.group
             res_users = res_users.filter(group=group)
@@ -102,7 +109,6 @@ class ProfileViewSet(viewsets.ModelViewSet):
         return res_users
 
     def set_profile_parms(self, request, user):
-        print request.data
         role = UserRole.objects.get(id=request.data.get('role'))
         role_level = role.role_level
         active = request.data.get('active', 'no_action')
