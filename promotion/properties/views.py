@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.http.response import HttpResponseBase
 from django.utils.cache import cc_delim_re, patch_vary_headers
 from promotion.utils.handler import Ssql
+from promotion.utils.handler import QSHandler
 from rest_framework import status
 from promotion.utils.handler import AssetsImgHandler as AIH
 
@@ -29,14 +30,20 @@ class PropertyViewSet(viewsets.ModelViewSet):
     serializer_class = PropertySerializer
 
     def list(self, request, *args, **kwargs):
-        keys = [{'key': 'parms', 'val': (u'性质', u'住宅')},
-                {'key': 'parms', 'val': (u'面积（平米）', (90, 120))},
-                {'key': 'instruction', 'val': (u'债权本金（万）', (0, 2000))},
-                {'key': 'instruction', 'val': (u'债权利息（万）', (2, 3))}]
-        sql = Ssql(keys).sql
-        sql1 = 'select * from properties_assets'
-        queryset = Assets.objects.raw(sql1)
+        # keys = [{'key': 'parms', 'val': (u'性质', u'住宅')},
+        #         {'key': 'parms', 'val': (u'面积（平米）', (90, 120))},
+        #         {'key': 'instruction', 'val': (u'债权本金（万）', (0, 2000))},
+        #         {'key': 'instruction', 'val': (u'债权利息（万）', (2, 3))}]
+        keys = [{'key': 'spot', 'val': (u'汽车参数1', u'w123')},]
+        # sql = Ssql(keys).sql
+        # queryset = Assets.objects.raw(sql)
         # queryset = self.filter_queryset(self.get_queryset())
+        requestType = request.GET.get('t')
+        user_id = request.user.id
+        region_id = request.GET.get('region_id')
+        search_keys = request.GET.get('keys', keys)
+        qsinstance = QSHandler(requestType, user_id, region_id, search_keys)
+        queryset = qsinstance.queryset
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

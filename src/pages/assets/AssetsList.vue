@@ -337,7 +337,14 @@
         })
       },
       getProperties() {
-        this.axios.get(this.propertyUrl)
+        this.axios.get(this.propertyUrl,
+        {
+          params:{
+            t: 'backend',
+            region_id: this.activeUser.group_id,
+            user_id: this.activeUser.user_id,
+          }
+        })
         .then(res => {
           if (res.status == 200) {
             this.properties = res.data
@@ -353,6 +360,7 @@
         })
       },
       showModal(action, index) {
+        console.log(this.activeUser)
         if(action == 'add') {
           this.propertyAdd = true
           if(this.currentProperty.id) {
@@ -409,6 +417,7 @@
           this.currentProperty.category_id = resultCateId
         }
         this.currentProperty.author_id = parseInt(this.activeUser.user_id)
+        this.currentProperty.region_id = parseInt(this.activeUser.group_id)
         this.axios({
           method: method,
           data: this.currentProperty,
@@ -444,7 +453,7 @@
         let delConfirmMsg = '删除成功!'
         this.currentIndex = index
         this.currentProperty = Object.assign({}, this.properties[this.currentIndex])
-        this.$confirm('是否删除此类型', '警告', {
+        this.$confirm('是否删除此资产', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
