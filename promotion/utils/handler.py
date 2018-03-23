@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 
-class Ssql:
+from promotion.utils.fields import Base64ImageField
+from promotion.properties.models import AssetsImg
+from promotion.properties.models import Assets
+from promotion.accounts.models import User
+
+
+class Ssql(object):
     def __init__(self, keys):
         self.sql = 'select * from properties_assets where '
         self.conver = self.unicode_to_ascii
         self.task_list = []
+        # self.keys = keys
         for attr in keys:
             if isinstance(attr.get('val')[1], tuple):
                 tmp = self.fuzzy_match(attr['val'], attr['key'])
@@ -46,8 +53,6 @@ class Ssql:
 
 class AssetsImgHandler:
     def __init__(self, assets_id, assets_imgs=''):
-        from promotion.utils.fields import Base64ImageField
-        from promotion.properties.models import AssetsImg
         self.id = assets_id
         self.imgs = assets_imgs
         self.incubator = Base64ImageField()
@@ -107,6 +112,46 @@ class AssetsImgHandler:
         storage = imgFieldFile.storage
         storage.delete(img_path)
         return True
+
+
+class QSHandler(Ssql):
+    def __init__(self, t, user_id='', region_id='', keys=''):
+        self.requestType = t
+        self.user_id = user_id
+        self.region_id = region_id
+        self.isuper = False
+        self.keys = keys
+        self.queryset = getattr(self, t)
+
+    def _isSuperUser(self):
+        user = User.objects.get(id=self.user_id)
+        self.isuper = user.is_superuser
+
+    @property
+    def backend(self):
+        self._isSuperUser()
+        if not self.isuper:
+            return Assets.objects.filter(region_id=self.region_id)
+        return Assets.objects.all()
+
+    @property
+    def frontend(self):
+        if self.keys:
+            super(QSHandler, self).__init__(self.keys)
+            return Assets.objects.raw(self.sql.encode('utf-8'))
+        return Assets.objects.all()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

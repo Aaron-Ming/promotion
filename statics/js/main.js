@@ -17103,7 +17103,13 @@ exports.default = {
     getProperties: function getProperties() {
       var _this2 = this;
 
-      this.axios.get(this.propertyUrl).then(function (res) {
+      this.axios.get(this.propertyUrl, {
+        params: {
+          t: 'backend',
+          region_id: this.activeUser.group_id,
+          user_id: this.activeUser.user_id
+        }
+      }).then(function (res) {
         if (res.status == 200) {
           _this2.properties = res.data;
         } else {
@@ -17118,6 +17124,7 @@ exports.default = {
       });
     },
     showModal: function showModal(action, index) {
+      console.log(this.activeUser);
       if (action == 'add') {
         this.propertyAdd = true;
         if (this.currentProperty.id) {
@@ -17175,6 +17182,7 @@ exports.default = {
         this.currentProperty.category_id = resultCateId;
       }
       this.currentProperty.author_id = parseInt(this.activeUser.user_id);
+      this.currentProperty.region_id = parseInt(this.activeUser.group_id);
       this.axios({
         method: method,
         data: this.currentProperty,
@@ -17212,7 +17220,7 @@ exports.default = {
       var delConfirmMsg = '删除成功!';
       this.currentIndex = index;
       this.currentProperty = (0, _assign2.default)({}, this.properties[this.currentIndex]);
-      this.$confirm('是否删除此类型', '警告', {
+      this.$confirm('是否删除此资产', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -17281,14 +17289,23 @@ exports.default = {
       currentCategory: {},
       currentIndex: null,
       categoryDel: false,
-      categoryUrl: '/assets/categorys/'
+      categoryUrl: '/assets/categorys/',
+      instrArr: [],
+      parmsArr: [],
+      spotArr: []
     };
   },
   created: function created() {
     this.getCategorys();
   },
 
+
   methods: {
+    mapParms: function mapParms() {
+      this.instrArr = this.currentCategory.instruction;
+      this.parmsArr = this.currentCategory.parms;
+      this.spotArr = this.currentCategory.spot;
+    },
     addParmButton: function addParmButton(t) {
       this.currentCategory[t].push(null);
     },
@@ -17296,9 +17313,9 @@ exports.default = {
       this.currentCategory[t].splice(index, 1);
     },
     initParmArr: function initParmArr() {
-      this.currentCategory.instruction = [];
-      this.currentCategory.spot = [];
-      this.currentCategory.parms = [];
+      this.currentCategory.instruction = [null];
+      this.currentCategory.spot = [null];
+      this.currentCategory.parms = [null];
     },
     getCategorys: function getCategorys() {
       var _this = this;
@@ -17320,15 +17337,19 @@ exports.default = {
     showModal: function showModal(action, index) {
       if (action == 'add') {
         this.categoryAdd = true;
-        this.initParmArr();
         if (this.currentCategory.id) {
           this.currentCategory = {};
         }
+
+        this.initParmArr();
       } else if (index >= 0) {
         this.currentIndex = index;
         this.currentCategory = (0, _assign2.default)({}, this.categorys[index]);
+        this.categoryAdd = false;
       }
       this.categoryModal = true;
+      this.mapParms();
+      console.log(this.currentCategory);
     },
     detailUrl: function detailUrl() {
       return this.categoryUrl + this.currentCategory.id + '/';
@@ -17336,7 +17357,7 @@ exports.default = {
     submitCategory: function submitCategory() {
       var _this2 = this;
 
-      var submitUrl = '/assets/categorys/';
+      var submitUrl = this.categoryUrl;
       var method = 'post';
       if (!this.categoryAdd) {
         submitUrl = this.detailUrl();
@@ -17387,7 +17408,6 @@ exports.default = {
           url: _this3.detailUrl()
         }).then(function (res) {
           if (res.status === 410) {
-            console.log(res.status);
             _this3.$notify.error({
               title: '删除资产种类失败',
               duration: 0,
@@ -26681,51 +26701,41 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
+              _c("b", [_vm._v("资产说明模板参数   ")]),
+              _vm._v(" "),
               _c(
-                "div",
-                [
-                  _c("b", [_vm._v("资产说明模板参数   ")]),
-                  _vm._v(" "),
-                  _c(
-                    "el-button",
-                    {
-                      attrs: {
-                        type: "primary",
-                        size: "mini",
-                        icon: "el-icon-plus"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.addParmButton("instruction")
-                        }
-                      }
-                    },
-                    [_vm._v("添加")]
-                  )
-                ],
-                1
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "mini",
+                    icon: "el-icon-plus"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.addParmButton("instruction")
+                    }
+                  }
+                },
+                [_vm._v("添加")]
               ),
               _vm._v(" "),
               _c(
-                "div",
-                _vm._l(_vm.currentCategory.instruction, function(item, index) {
+                "el-form-item",
+                { attrs: { label: "" } },
+                _vm._l(_vm.instrArr, function(item, index) {
                   return _c(
-                    "el-form-item",
-                    { attrs: { label: "" } },
+                    "div",
                     [
                       _c("el-input", {
                         staticStyle: { width: "50%" },
                         attrs: { size: "mini" },
                         model: {
-                          value: _vm.currentCategory.instruction[index],
+                          value: _vm.instrArr[index],
                           callback: function($$v) {
-                            _vm.$set(
-                              _vm.currentCategory.instruction,
-                              index,
-                              $$v
-                            )
+                            _vm.$set(_vm.instrArr, index, $$v)
                           },
-                          expression: "currentCategory.instruction[index]"
+                          expression: "instrArr[index]"
                         }
                       }),
                       _vm._v(" "),
@@ -26744,47 +26754,41 @@ var render = function() {
                 })
               ),
               _vm._v(" "),
+              _c("b", [_vm._v("资产配套模板参数   ")]),
+              _vm._v(" "),
               _c(
-                "div",
-                [
-                  _c("b", [_vm._v("资产配套模板参数   ")]),
-                  _vm._v(" "),
-                  _c(
-                    "el-button",
-                    {
-                      attrs: {
-                        type: "primary",
-                        size: "mini",
-                        icon: "el-icon-plus"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.addParmButton("parms")
-                        }
-                      }
-                    },
-                    [_vm._v("添加")]
-                  )
-                ],
-                1
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "mini",
+                    icon: "el-icon-plus"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.addParmButton("parms")
+                    }
+                  }
+                },
+                [_vm._v("添加")]
               ),
               _vm._v(" "),
               _c(
-                "div",
-                _vm._l(_vm.currentCategory.parms, function(item, index) {
+                "el-form-item",
+                { attrs: { label: "" } },
+                _vm._l(_vm.parmsArr, function(item, index) {
                   return _c(
-                    "el-form-item",
-                    { attrs: { label: "" } },
+                    "div",
                     [
                       _c("el-input", {
                         staticStyle: { width: "50%" },
                         attrs: { size: "mini" },
                         model: {
-                          value: _vm.currentCategory.parms[index],
+                          value: _vm.parmsArr[index],
                           callback: function($$v) {
-                            _vm.$set(_vm.currentCategory.parms, index, $$v)
+                            _vm.$set(_vm.parmsArr, index, $$v)
                           },
-                          expression: "currentCategory.parms[index]"
+                          expression: "parmsArr[index]"
                         }
                       }),
                       _vm._v(" "),
@@ -26803,47 +26807,41 @@ var render = function() {
                 })
               ),
               _vm._v(" "),
+              _c("b", [_vm._v("资产亮点模板参数   ")]),
+              _vm._v(" "),
               _c(
-                "div",
-                [
-                  _c("b", [_vm._v("资产亮点模板参数   ")]),
-                  _vm._v(" "),
-                  _c(
-                    "el-button",
-                    {
-                      attrs: {
-                        type: "primary",
-                        size: "mini",
-                        icon: "el-icon-plus"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.addParmButton("spot")
-                        }
-                      }
-                    },
-                    [_vm._v("添加")]
-                  )
-                ],
-                1
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "mini",
+                    icon: "el-icon-plus"
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.addParmButton("spot")
+                    }
+                  }
+                },
+                [_vm._v("添加")]
               ),
               _vm._v(" "),
               _c(
-                "div",
-                _vm._l(_vm.currentCategory.spot, function(item, index) {
+                "el-form-item",
+                { attrs: { label: "" } },
+                _vm._l(_vm.spotArr, function(item, index) {
                   return _c(
-                    "el-form-item",
-                    { attrs: { label: "" } },
+                    "div",
                     [
                       _c("el-input", {
                         staticStyle: { width: "50%" },
                         attrs: { size: "mini" },
                         model: {
-                          value: _vm.currentCategory.spot[index],
+                          value: _vm.spotArr[index],
                           callback: function($$v) {
-                            _vm.$set(_vm.currentCategory.spot, index, $$v)
+                            _vm.$set(_vm.spotArr, index, $$v)
                           },
-                          expression: "currentCategory.spot[index]"
+                          expression: "spotArr[index]"
                         }
                       }),
                       _vm._v(" "),

@@ -15,12 +15,14 @@ class CategorySerializer(serializers.ModelSerializer):
             if isinstance(validator, validators.UniqueValidator):
                 validator.message = u'资产类型已经存在！'
 
+
 class PropertySerializer(serializers.ModelSerializer):
     instruction = serializers.JSONField(binary=False)
     parms = serializers.JSONField(binary=False)
     spot = serializers.JSONField(binary=False)
     category_id = serializers.IntegerField()
     author_id = serializers.IntegerField()
+    region_id = serializers.IntegerField()
     category_name = serializers.CharField(source='category.category_name', required=False)
 
     class Meta:
@@ -31,7 +33,8 @@ class PropertySerializer(serializers.ModelSerializer):
                   'spot', 'contacts', 'c_phone', 'fax',
                   'p_address', 'transaction', 'statement',
                   'pub_time', 'category_id', 'author_id',
-                  'category_name', 'assets_imgs',)
+                  'category_name', 'assets_imgs', 'region_id')
+
 
 class AssetsImgSerializer(serializers.ModelSerializer):
     class Meta:

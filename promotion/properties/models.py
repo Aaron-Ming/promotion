@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from promotion.accounts.models import UserGroup
 import json
 # Create your models here.
 from django_mysql.models import JSONField, Model
@@ -58,6 +59,8 @@ class Assets(models.Model):
     statement = models.TextField(verbose_name=u'声明')
     # 资产创建者
     author = models.ForeignKey(User, verbose_name=u'创建人')
+    # 资产所属区域
+    region = models.ForeignKey(UserGroup, verbose_name=u'资产所属区域')
     # 创建时间
     pub_time = models.DateTimeField(auto_now_add=True, verbose_name=u'发布时间')
 
