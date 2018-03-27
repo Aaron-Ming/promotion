@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
+
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -83,6 +86,22 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return self.id_name
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        mod = apps.get_model(self._meta.app_label, self._meta.object_name)
+        try:
+            instance = mod.objects.get(id=self.id)
+        except:
+            instance = None
+        else:
+            for field in instance._meta.fields:
+                if field.get_internal_type() == 'FileField' or field.get_internal_type() == 'ImageField':
+                    if getattr(instance, field.name) and getattr(instance, field.name) != getattr(self, field.name):
+                        path = getattr(instance, field.name).path
+                        if os.path.isfile(path):
+                            os.remove(path)
+        super(mod, self).save(force_insert, force_update, using, update_fields)
 
 
 def profile_post_save(sender, instance, *args, **kwargs):
